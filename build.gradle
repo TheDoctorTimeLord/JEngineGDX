@@ -1,0 +1,44 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+    google()
+    gradlePluginPortal()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
+apply plugin: 'java-library'
+
+group = 'ru.jending'
+version = '0.1'
+
+targetCompatibility = 1.17
+sourceCompatibility = 1.17
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+ext {
+    gdxVersion = '1.10.0'
+    box2DLightsVersion = '1.5'
+    ashleyVersion = '1.7.3'
+    aiVersion = '1.8.2'
+}
+
+dependencies {
+    compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    compileOnly "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+    compileOnly "com.badlogicgames.ashley:ashley:$ashleyVersion"
+    compileOnly "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+
+    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    testImplementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+    testImplementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+}
+
+test {
+    useJUnitPlatform()
+}
