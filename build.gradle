@@ -1,44 +1,57 @@
-repositories {
-    mavenLocal()
-    mavenCentral()
-    google()
-    gradlePluginPortal()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        google()
+    }
+    dependencies { }
 }
 
-apply plugin: 'java-library'
+allprojects {
+    apply plugin: "eclipse"
 
-group = 'ru.jending'
-version = '0.1'
+    version = '1.0'
+    ext {
+        appName = "JEngineGDX"
+        gdxVersion = '1.12.0'
+        roboVMVersion = '2.3.19'
+        box2DLightsVersion = '1.5'
+        ashleyVersion = '1.7.4'
+        aiVersion = '1.8.2'
+        gdxControllersVersion = '2.2.1'
+    }
 
-targetCompatibility = 1.17
-sourceCompatibility = 1.17
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-ext {
-    gdxVersion = '1.10.0'
-    box2DLightsVersion = '1.5'
-    ashleyVersion = '1.7.3'
-    aiVersion = '1.8.2'
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
+    }
 }
 
-dependencies {
-    compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    compileOnly "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-    compileOnly "com.badlogicgames.ashley:ashley:$ashleyVersion"
-    compileOnly "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+project(":desktop") {
+    apply plugin: "java-library"
 
-    testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    testImplementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-    testImplementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
-    testImplementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    }
 }
 
-test {
-    useJUnitPlatform()
+project(":core") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        api "com.esotericsoftware.spine:spine-libgdx:3.8.55.1"
+    }
 }
