@@ -53,5 +53,9 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
         api "com.esotericsoftware.spine:spine-libgdx:3.8.55.1"
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
     }
+}
+
+dependencies {
 }
