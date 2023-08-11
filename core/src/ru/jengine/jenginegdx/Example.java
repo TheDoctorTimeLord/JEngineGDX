@@ -1,17 +1,24 @@
 package ru.jengine.jenginegdx;
 
+import ru.jengine.jenginegdx.ui.system.ImageLogic;
+import ru.jengine.jenginegdx.ui.system.WindowLogic;
+import ru.jengine.jenginegdx.ui.system.uifactory.FactoryManager;
+import ru.jengine.jenginegdx.ui.system.util.Coordinates;
+import ru.jengine.jenginegdx.ui.system.widget.Widget;
+
 import java.io.FileInputStream;
+import java.util.Map;
 import java.util.Properties;
 
 public class Example {
 
     public static void main(String[] args) throws Exception {
+        FactoryManager factoryManager = new FactoryManager();
 
-        String appConfigPath = System.getProperty("user.dir") + "/application.properties";
+        ImageLogic imageSample = new ImageLogic(new Coordinates(5,6), null);
+        WindowLogic windowLogic = new WindowLogic(new Coordinates(7,8), Map.of("image",imageSample));
 
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(appConfigPath));
-
-        System.out.println(properties);
+        Widget widget = factoryManager.constructRecursive(windowLogic);
+        System.out.println(widget);
     }
 }
