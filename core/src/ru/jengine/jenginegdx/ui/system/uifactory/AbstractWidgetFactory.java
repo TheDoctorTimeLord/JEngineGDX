@@ -9,28 +9,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbstractWidgetFactory<T extends Widget, L extends LogicObject> {
+public class AbstractWidgetFactory {
 
-    public T makeInstance(L obj, FactoryManager factoryManager, Class<T> clazz) {
+    private Map<String, Widget> subWidgets;
 
-        Map <String, Widget> subWidgets = new HashMap <>();
+    public void makeInstance(LogicObject obj, FactoryManager factoryManager) {
+
+        subWidgets = new HashMap <>();
         if (obj.getContent() != null) {
             System.out.println(obj.getClass().toString());
-            obj.getContent().forEach((k, v) -> {
-                if (v.getClass().isAssignableFrom(LogicObject.class)) {
+            for(Map.Entry<String, Object> e: obj.getContent().entrySet()){
+
+                String k = e.getKey();
+                Object v = e.getValue();
+
+                if (v instanceof LogicObject) {
                     Widget widget = factoryManager.constructRecursive((LogicObject) v);
                     subWidgets.put(k, widget);
                 }
-            });
+                else {
+                    //TODO common widget properties
+                }
+            }
         }
+    }
 
-        T ret = null;
-        try {
-            ret = clazz.getConstructor(Coordinates.class, Map.class).newInstance(obj.getCoordinates(), subWidgets);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
+    public Map<String,Widget> getSubWidgets() {
+        return subWidgets;
     }
 }
