@@ -1,18 +1,15 @@
-package ru.jengine.jenginegdx.ui.system;
+package ru.jengine.jenginegdx.logic;
 
 import com.badlogic.gdx.utils.ByteArray;
 import ru.jengine.jenginegdx.ui.system.util.Coordinates;
 
 import java.util.Map;
 
-public class ImageLogic {
-    private final Coordinates coordinates;
-    private final Map <String, Object> content;
+public class ImageLogic extends LogicObject{
     private byte[] img;
 
     public ImageLogic(Coordinates coordinates, Map <String, Object> content) {
-        this.coordinates = coordinates;
-        this.content = content;
+        super(coordinates,content);
     }
 
     public void resize(int newX, int newY) {
@@ -25,13 +22,5 @@ public class ImageLogic {
 
     public void setImg(byte[] img) {
         this.img = img;
-    }
-
-    public Map <String, Object> getContent() {
-        return content;
-    }
-
-    public Coordinates getCoordinates() {
-        return this.coordinates;
     }
 }

@@ -1,18 +1,16 @@
-package ru.jengine.jenginegdx.ui.system;
+package ru.jengine.jenginegdx.logic;
 
 import ru.jengine.jenginegdx.ui.system.util.Coordinates;
 
 import java.util.Map;
 
-public class WindowLogic {
-    private final Coordinates coordinates;
-    private final Map <String, Object> content;
+public class WindowLogic extends LogicObject{
+
     private final int someNumberForLogic = 1;
     private final int otherNumberForLogic = 0;
 
     public WindowLogic(Coordinates coordinates, Map <String, Object> content) {
-        this.coordinates = coordinates;
-        this.content = content;
+        super(coordinates, content);
     }
 
     public void resize(int newX, int newY) {
@@ -21,13 +19,5 @@ public class WindowLogic {
 
     public int countSomething() {
         return someNumberForLogic + otherNumberForLogic;
-    }
-
-    public Map <String, Object> getContent() {
-        return content;
-    }
-
-    public Coordinates getCoordinates() {
-        return this.coordinates;
     }
 }

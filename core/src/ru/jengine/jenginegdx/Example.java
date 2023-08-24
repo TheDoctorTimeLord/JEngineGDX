@@ -1,14 +1,12 @@
 package ru.jengine.jenginegdx;
 
-import ru.jengine.jenginegdx.ui.system.ImageLogic;
-import ru.jengine.jenginegdx.ui.system.WindowLogic;
+import ru.jengine.jenginegdx.logic.ImageLogic;
+import ru.jengine.jenginegdx.logic.WindowLogic;
 import ru.jengine.jenginegdx.ui.system.uifactory.FactoryManager;
 import ru.jengine.jenginegdx.ui.system.util.Coordinates;
 import ru.jengine.jenginegdx.ui.system.widget.Widget;
 
-import java.io.FileInputStream;
 import java.util.Map;
-import java.util.Properties;
 
 public class Example {
 

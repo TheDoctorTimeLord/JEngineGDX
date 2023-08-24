@@ -1,27 +1,27 @@
 package ru.jengine.jenginegdx.ui.system.uifactory;
 
-import ru.jengine.jenginegdx.ui.system.ImageLogic;
-import ru.jengine.jenginegdx.ui.system.WindowLogic;
+import ru.jengine.jenginegdx.logic.ImageLogic;
+import ru.jengine.jenginegdx.logic.LogicObject;
+import ru.jengine.jenginegdx.logic.WindowLogic;
+import ru.jengine.jenginegdx.ui.system.widget.AbstractWidget;
+import ru.jengine.jenginegdx.ui.system.widget.Image;
 import ru.jengine.jenginegdx.ui.system.widget.Widget;
+import ru.jengine.jenginegdx.ui.system.widget.Window;
 
-import java.util.Properties;
+import java.util.Map;
 
 public class FactoryManager {
 
-    public Widget constructRecursive(Object object) {
+    public <T extends Widget,L extends LogicObject> Widget constructRecursive(L object) {
 
-        WidgetFactory factory = makeFactory(object);
-        return factory.makeInstance(object, this);
+        AbstractWidgetFactory <T, L> widgetFactory = new AbstractWidgetFactory<T,L>();
+        return widgetFactory.makeInstance(object, this, (Class <T>) AbstractWidget.class);
     }
 
-    private WidgetFactory makeFactory(Object object) {
-        if (object.getClass().equals(WindowLogic.class)){
-            return new WindowWidgetFactory();
-        }
-        if (object.getClass().equals(ImageLogic.class)){
-            return new ImageWidgetFactory();
-        }
-        return null;
-    }
+    private Map<Class, Class> logicToWidgetClassMap = Map.of(
+            WindowLogic.class, Window.class,
+            ImageLogic.class, Image.class
+    );
+
 
 }
