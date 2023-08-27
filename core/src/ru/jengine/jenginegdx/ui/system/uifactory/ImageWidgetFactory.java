@@ -7,23 +7,10 @@ import ru.jengine.jenginegdx.ui.system.widget.Widget;
 
 import java.util.HashMap;
 import java.util.Map;
-//Not needed?
-//public class ImageWidgetFactory implements WidgetFactory {
-//
-//    @Override
-//    public Image makeInstance(Object object, FactoryManager factoryManager) {
-//        ImageLogic imageLogic = (ImageLogic) object;
-//
-//        Map <String, Widget> subWidgets = new HashMap <>();
-//        if (imageLogic.getContent() != null) {
-//            imageLogic.getContent().forEach((k, v) -> {
-//                if (v.getClass().isInstance(LogicObject.class)) {
-//                    Widget widget = factoryManager.constructRecursive((LogicObject) v);
-//                    subWidgets.put(k, widget);
-//                }
-//
-//            });
-//        }
-//        return new Image(imageLogic.getCoordinates(), subWidgets);
-//    }
-//}
+public class ImageWidgetFactory extends AbstractWidgetFactory<ImageLogic, Image> {
+
+    @Override
+    protected Image makeInstanceInternal(ImageLogic obj, FactoryManager manager, Map <String, Widget> subWidgets) {
+        return new Image(obj.getCoordinates(), subWidgets);
+    }
+}

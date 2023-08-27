@@ -12,15 +12,13 @@ import java.util.Map;
 
 public class FactoryManager {
 
-    public <T extends Widget,L extends LogicObject> Widget constructRecursive(L object) {
-
-        AbstractWidgetFactory <T, L> widgetFactory = new AbstractWidgetFactory<T,L>();
-        return widgetFactory.makeInstance(object, this, (Class <T>) AbstractWidget.class);
+    public <T extends Widget, L extends LogicObject> Widget constructRecursive(L object) {
+        return logicToWidgetClassMap.get(object.getClass()).makeInstance(object, this);
     }
 
-    private Map<Class, Class> logicToWidgetClassMap = Map.of(
-            WindowLogic.class, Window.class,
-            ImageLogic.class, Image.class
+    private Map <Class <?>, AbstractWidgetFactory> logicToWidgetClassMap = Map.of(
+            WindowLogic.class, new WindowWidgetFactory(),
+            ImageLogic.class, new ImageWidgetFactory()
     );
 
 
