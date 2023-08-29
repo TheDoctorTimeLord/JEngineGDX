@@ -7,7 +7,6 @@ import ru.jengine.jenginegdx.ui.system.util.Coordinates;
 import ru.jengine.jenginegdx.ui.system.widget.Widget;
 
 import java.util.List;
-import java.util.Map;
 
 public class Example {
 

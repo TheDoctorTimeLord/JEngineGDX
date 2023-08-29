@@ -1,10 +1,8 @@
 package ru.jengine.jenginegdx.logic;
 
-import com.badlogic.gdx.utils.ByteArray;
 import ru.jengine.jenginegdx.ui.system.util.Coordinates;
 
 import java.util.List;
-import java.util.Map;
 
 public class ImageLogic extends LogicObject{
     private byte[] img;

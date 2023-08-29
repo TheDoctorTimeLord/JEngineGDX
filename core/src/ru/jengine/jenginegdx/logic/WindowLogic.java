@@ -3,7 +3,6 @@ package ru.jengine.jenginegdx.logic;
 import ru.jengine.jenginegdx.ui.system.util.Coordinates;
 
 import java.util.List;
-import java.util.Map;
 
 public class WindowLogic extends LogicObject{
 
