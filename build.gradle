@@ -11,6 +11,7 @@ buildscript {
 
 allprojects {
     apply plugin: "eclipse"
+    apply plugin: "java-library"
 
     version = '1.0'
     ext {
@@ -32,39 +33,8 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
     }
-}
 
-project(":desktop") {
-    apply plugin: "java-library"
-
-    dependencies {
-        implementation project(":core")
-        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-    }
-}
-
-project(":core") {
-    apply plugin: "java-library"
-
-    dependencies {
-        implementation project(":jenginegdx")
-        api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        api "com.esotericsoftware.spine:spine-libgdx:3.8.55.1"
-    }
-}
-
-project(":jenginegdx") {
-    apply plugin: "java-library"
-
-    dependencies {
-        compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compileOnly "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        compileOnly "com.esotericsoftware.spine:spine-libgdx:3.8.55.1"
-        implementation fileTree(dir: '../libs/', include: ['*.jar'])
-    }
+    sourceCompatibility = 17
+    targetCompatibility = 17
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 }
