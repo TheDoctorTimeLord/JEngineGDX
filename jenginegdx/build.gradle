@@ -3,7 +3,6 @@ eclipse.project.name = appName + "-jenginegdx"
 dependencies {
     compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
     compileOnly "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    compileOnly "com.badlogicgames.ashley:ashley:$ashleyVersion"
-    compileOnly "com.esotericsoftware.spine:spine-libgdx:3.8.55.1"
-    implementation fileTree(dir: '../libs/', include: ['*.jar'])
+    api "net.onedaybeard.artemis:artemis-odb:2.3.0"
+    api fileTree(dir: '../libs/', include: ['*.jar'])
 }
