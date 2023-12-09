@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.JEngineContainer;
 import ru.jengine.beancontainer.configuration.ContainerConfiguration;
 import ru.jengine.beancontainer.configuration.DefaultContainerConfigurationBuilder;
-import ru.jengine.jenginegdx.container.modules.MainModule;
+import ru.jengine.jenginegdx.container.modules.MainGameModel;
 import ru.jengine.jenginegdx.container.wrappers.WorldWrapper;
 import ru.jengine.jenginegdx.view.renderes.TextureRenderer;
 import ru.jengine.jenginegdx.viewmodel.JEngineAdapter;
@@ -21,7 +21,7 @@ public class ApplicationController extends JEngineAdapter {
 
 	@Override
 	protected DefaultContainerConfigurationBuilder prepareContainerConfiguration() {
-		return ContainerConfiguration.builder(MainModule.class);
+		return ContainerConfiguration.builder(MainGameModel.class);
 	}
 
 	@Override
