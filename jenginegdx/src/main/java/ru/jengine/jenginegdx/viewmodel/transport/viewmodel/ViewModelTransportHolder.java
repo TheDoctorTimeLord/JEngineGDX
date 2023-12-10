@@ -4,11 +4,16 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.jenginegdx.viewmodel.transport.Transport;
 
 @Bean
-public class ViewModelTransportAdapter implements Transport<ViewModelTransportEvent, FromModelEventListener> {
+public class ViewModelTransportHolder implements Transport<ViewModelTransportEvent, FromModelEventListener> {
     private ViewModelTransport viewModelTransport;
+    private FromModelEventListener listener;
 
     public void setViewModelTransport(ViewModelTransport viewModelTransport) {
         this.viewModelTransport = viewModelTransport;
+
+        if (listener != null) {
+            viewModelTransport.setExternalEventListener(listener);
+        }
     }
 
     @Override
@@ -18,6 +23,10 @@ public class ViewModelTransportAdapter implements Transport<ViewModelTransportEv
 
     @Override
     public void setExternalEventListener(FromModelEventListener listener) {
-        viewModelTransport.setExternalEventListener(listener);
+        this.listener = listener;
+
+        if (viewModelTransport != null) {
+            viewModelTransport.setExternalEventListener(listener);
+        }
     }
 }
