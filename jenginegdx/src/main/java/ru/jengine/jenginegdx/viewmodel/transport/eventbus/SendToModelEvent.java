@@ -1,6 +1,6 @@
 package ru.jengine.jenginegdx.viewmodel.transport.eventbus;
 
-import ru.jengine.jenginegdx.viewmodel.eventbus.EventBusEvent;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBusEvent;
 import ru.jengine.jenginegdx.viewmodel.transport.viewmodel.ViewModelTransportEvent;
 
 public class SendToModelEvent implements EventBusEvent {

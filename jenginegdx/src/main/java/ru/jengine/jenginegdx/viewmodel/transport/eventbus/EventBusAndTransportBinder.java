@@ -3,7 +3,7 @@ package ru.jengine.jenginegdx.viewmodel.transport.eventbus;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.RemoveAfterInitialize;
 import ru.jengine.eventqueue.event.PostHandler;
-import ru.jengine.jenginegdx.container.wrappers.EventBusWrapper;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBus;
 import ru.jengine.jenginegdx.viewmodel.transport.viewmodel.ViewModelTransportHolder;
 
 @Bean
@@ -22,7 +22,7 @@ public class EventBusAndTransportBinder
         }
     }
 
-    public EventBusAndTransportBinder(EventBusWrapper eventBus, ViewModelTransportHolder transportHolder) {
+    public EventBusAndTransportBinder(EventBus eventBus, ViewModelTransportHolder transportHolder) {
         transportHolder.setExternalEventListener(eventBus::registerEvent);
         eventBus.registerHandler(new SendToModelEventHandler(transportHolder));
     }

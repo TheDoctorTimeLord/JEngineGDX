@@ -5,9 +5,4 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class TextureComponent extends Component {
     public Texture texture;
-
-    public TextureComponent texture(Texture texture) {
-        this.texture = texture;
-        return this;
-    }
 }

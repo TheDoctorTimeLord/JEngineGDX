@@ -3,7 +3,7 @@ package ru.jengine.jenginegdx.viewmodel.ecs;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
-import ru.jengine.jenginegdx.viewmodel.ecs.transform.TransformComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public abstract class SortedByZIteratingSystem extends BaseEntitySystem {
-    private ComponentMapper<TransformComponent> transformComponentMapper;
+    private ComponentMapper<CoordinatesComponent> transformComponentMapper;
     private Comparator<Integer> additionalComparator = (id1, id2) -> 0;
 
     protected void setAdditionalComparator(Comparator<Integer> additionalComparator) {

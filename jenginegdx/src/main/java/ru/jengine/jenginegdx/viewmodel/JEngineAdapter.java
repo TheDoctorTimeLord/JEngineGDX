@@ -5,12 +5,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import ru.jengine.beancontainer.JEngineContainer;
 import ru.jengine.beancontainer.configuration.ContainerConfiguration;
 import ru.jengine.beancontainer.configuration.DefaultContainerConfigurationBuilder;
-import ru.jengine.jenginegdx.container.UpdatableManager;
 import ru.jengine.jenginegdx.container.modules.MainGameModel;
+import ru.jengine.jenginegdx.viewmodel.ecs.WorldHolder;
 
 public abstract class JEngineAdapter extends ApplicationAdapter {
     private JEngineContainer container;
-    private UpdatableManager updatableManager;
+    private WorldHolder worldHolder;
 
     @Override
     public void create() {
@@ -22,7 +22,7 @@ public abstract class JEngineAdapter extends ApplicationAdapter {
 
         createGameWithContainer(container);
 
-        updatableManager = container.getBean(UpdatableManager.class);
+        worldHolder = container.getBean(WorldHolder.class);
     }
 
     protected abstract void configureContainer(DefaultContainerConfigurationBuilder configurationBuilder);
@@ -36,7 +36,7 @@ public abstract class JEngineAdapter extends ApplicationAdapter {
 
     @Override
     public void render() {
-        updatableManager.updateSystems();
+        worldHolder.update();
     }
 
     @Override

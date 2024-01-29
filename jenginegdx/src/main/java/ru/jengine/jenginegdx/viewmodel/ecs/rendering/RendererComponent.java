@@ -5,9 +5,4 @@ import ru.jengine.jenginegdx.view.Renderer;
 
 public class RendererComponent extends Component {
     public Renderer renderer;
-
-    public RendererComponent renderer(Renderer renderer) {
-        this.renderer = renderer;
-        return this;
-    }
 }
