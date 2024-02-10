@@ -1,11 +1,13 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
-import ru.jengine.jenginegdx.viewmodel.ecs.input.UserInputComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.InputComponentMarker;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.InputComponent;
 
-public class MouseEventComponent extends UserInputComponent {
-    public float mouseX;
-    public float mouseY;
-    public MouseEventType eventType;
+@InputComponentMarker
+public class MouseEventComponent extends InputComponent {
+    private float mouseX;
+    private float mouseY;
+    private MouseEventType eventType;
 
     public MouseEventComponent mouseX(float mouseX) {
         this.mouseX = mouseX;
@@ -20,6 +22,18 @@ public class MouseEventComponent extends UserInputComponent {
     public MouseEventComponent eventType(MouseEventType eventType) {
         this.eventType = eventType;
         return this;
+    }
+
+    public float getMouseX() {
+        return mouseX;
+    }
+
+    public float getMouseY() {
+        return mouseY;
+    }
+
+    public MouseEventType getEventType() {
+        return eventType;
     }
 
     @Override

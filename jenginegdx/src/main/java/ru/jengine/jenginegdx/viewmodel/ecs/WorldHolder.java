@@ -3,6 +3,7 @@ package ru.jengine.jenginegdx.viewmodel.ecs;
 import com.artemis.BaseSystem;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
+import com.artemis.link.EntityLinkManager;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.PreDestroy;
 
@@ -15,6 +16,8 @@ public class WorldHolder {
 
     public WorldHolder(List<BaseSystem> ecsSystems) {
         WorldConfiguration config = new WorldConfiguration();
+
+        config.setSystem(new EntityLinkManager());
 
         for (BaseSystem ecsSystem : ecsSystems) {
             config.setSystem(ecsSystem);

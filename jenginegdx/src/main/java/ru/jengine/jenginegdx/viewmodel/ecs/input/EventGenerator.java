@@ -9,7 +9,7 @@ public class EventGenerator {
         this.world = world;
     }
 
-    public <T extends UserInputComponent> T generate(Class<T> componentClass) {
+    public <T extends InputComponent> T generate(Class<T> componentClass) {
         return world.createEntity().edit().create(componentClass);
     }
 }

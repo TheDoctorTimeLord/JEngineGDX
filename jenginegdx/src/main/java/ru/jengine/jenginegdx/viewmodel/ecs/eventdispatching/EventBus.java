@@ -6,12 +6,11 @@ import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PreDestroy;
 import ru.jengine.eventqueue.Dispatcher;
 import ru.jengine.eventqueue.event.PostHandler;
-import ru.jengine.jenginegdx.Constants.SystemOrder;
 
 import java.util.List;
 
 @Bean
-@Order(SystemOrder.INTERNAL_SYSTEMS + 600)
+@Order(100)
 public class EventBus extends BaseSystem
 {
     private final Dispatcher dispatcher;

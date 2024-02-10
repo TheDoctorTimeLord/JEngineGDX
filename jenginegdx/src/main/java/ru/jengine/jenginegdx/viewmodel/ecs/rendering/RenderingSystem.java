@@ -1,55 +1,66 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.rendering;
 
-import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.artemis.annotations.All;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
-import ru.jengine.jenginegdx.Constants.SystemOrder;
-import ru.jengine.jenginegdx.view.Renderer;
-import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
+import ru.jengine.beancontainer.annotations.PostConstruct;
+import ru.jengine.jenginegdx.container.JEngineGdxConfiguration;
 import ru.jengine.jenginegdx.viewmodel.ecs.SortedByZIteratingSystem;
+import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
+
+import java.util.List;
 
 @Bean
-@Order(SystemOrder.RENDERING_SYSTEMS)
-@All(RendererComponent.class)
+@Order(1024)
+@All(VisibleComponent.class)
 public class RenderingSystem extends SortedByZIteratingSystem {
-    private final Batch renderingBatch = new SpriteBatch(); //TODO вынести в параметры системы
+    private final Batch batch;
     private final GameCamera gameCamera;
-    private ComponentMapper<RendererComponent> rendererComponentMapper;
+    private final List<RenderSubsystem> subsystems;
 
-    public RenderingSystem(GameCamera gameCamera) {
+    public RenderingSystem(JEngineGdxConfiguration configuration, GameCamera gameCamera, List<RenderSubsystem> subsystems) {
         this.gameCamera = gameCamera;
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setAutoShapeType(true);
+        this.batch = configuration.getBatch();
+        this.subsystems = subsystems;
+    }
+
+    @Override
+    protected void setWorld(World world) {
+        super.setWorld(world);
+    }
+
+    @PostConstruct
+    private void injectInSubsystems() {
+        for (RenderSubsystem subsystem : subsystems) {
+            world.inject(subsystem);
+        }
     }
 
     @Override
     protected void begin() {
         ScreenUtils.clear(0, 0, 0, 1);
 
-        renderingBatch.setProjectionMatrix(gameCamera.getCamera().combined);
-        renderingBatch.begin();
+        batch.setProjectionMatrix(gameCamera.getCamera().combined);
+        batch.begin();
     }
 
     @Override
     protected void process(int entityId) {
-        Renderer renderer = rendererComponentMapper.get(entityId).renderer;
-        if (renderer != null) {
-            renderer.render(entityId, renderingBatch);
+        for (RenderSubsystem subsystem : subsystems) {
+            subsystem.render(entityId, batch);
         }
     }
 
     @Override
     protected void end() {
-        renderingBatch.end();
+        batch.end();
     }
 
     @Override
     protected void dispose() {
-        renderingBatch.dispose();
+        batch.dispose();
     }
 }

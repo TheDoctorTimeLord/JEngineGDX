@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserEventHandlingComponent extends Component { //TODO всё же добавить инкапсуляцию компонентам
+public class UserEventHandlingComponent extends Component {
     private final Map<String, String> eventHandling = new HashMap<>();
 
     public UserEventHandlingComponent addHandling(String event, String handle) {

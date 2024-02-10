@@ -1,37 +1,20 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription;
-import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
-import com.artemis.utils.IntBag;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pool.Poolable;
-import com.badlogic.gdx.utils.Pools;
-import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
-import ru.jengine.jenginegdx.Constants.SystemOrder;
-import ru.jengine.jenginegdx.utils.IntBagUtils;
-import ru.jengine.jenginegdx.utils.figures.PositionedFigure;
-import ru.jengine.jenginegdx.viewmodel.ecs.bounds.GlobalBoundComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBus;
-import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.HierarchyChildrenComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.UserEventHandlingComponent;
 
-import javax.annotation.Nullable;
-
-@Bean
-@Order(SystemOrder.INTERNAL_SYSTEMS)
+//@Bean
+@Order(2)
 @All(MouseEventComponent.class)
 public class MouseEventDispatchingSystem extends IteratingSystem {
-    private final EventBus eventBus;
+    @Override
+    protected void process(int entityId) {
+
+    }
+    /*private final EventBus eventBus;
     private ComponentMapper<MouseEventComponent> mouseEventComponentMapper;
-    private ComponentMapper<GlobalBoundComponent> globalBoundComponentMapper;
     private ComponentMapper<UserEventHandlingComponent> userEventHandlingComponentMapper;
-    private ComponentMapper<HierarchyChildrenComponent> hierarchyChildrenComponentMapper;
 
     private EntitySubscription boundSubscription;
     private BoundEntity[] boundedEntities;
@@ -122,5 +105,5 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
             this.id = -1;
             this.bound = null;
         }
-    }
+    }*/
 }
