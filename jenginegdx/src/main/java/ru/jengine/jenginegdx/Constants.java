@@ -6,11 +6,11 @@ public interface Constants {
     }
 
     interface InputEvents {
-        String MOUSE_MOVE = "mouseMove";
-        String MOUSE_TOUCH_UP = "mouseTouchUp";
-        String MOUSE_TOUCH_DOWN = "mouseTouchDown";
-        String MOUSE_DRAGGING = "mouseDragging";
-        String MOUSE_DRAGGED_TO = "mouseDraggedTo";
+        String MOUSE_MOVE = "mouse_Move";
+        String MOUSE_TOUCH_UP = "mouse_TouchUp";
+        String MOUSE_TOUCH_DOWN = "mouse_TouchDown";
+        String MOUSE_DRAGGING = "mouse_Dragging";
+        String MOUSE_DRAGGED_TO = "mouse_DraggedTo";
     }
 
     interface UserEvents {

@@ -14,7 +14,7 @@ import java.util.List;
 @Bean
 @Order(0)
 public class CleanInputComponentSystem extends IteratingSystem {
-    public CleanInputComponentSystem(List<InputComponent> inputComponents) {
+    public CleanInputComponentSystem(List<InputComponent> inputComponents) { //TODO научиться получать классы
         super(Aspect.one(convertToAspect(inputComponents)));
     }
 

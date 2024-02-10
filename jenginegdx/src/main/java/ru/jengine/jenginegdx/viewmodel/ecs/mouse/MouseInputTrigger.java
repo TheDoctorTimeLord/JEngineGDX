@@ -1,12 +1,10 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
 import com.badlogic.gdx.math.Vector3;
-import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.EventGenerator;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.InputTrigger;
 
-@Bean
 public class MouseInputTrigger extends InputTrigger {
     private final GameCamera gameCamera;
     private float currentMouseX;

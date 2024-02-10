@@ -1,55 +1,93 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
+import com.artemis.Aspect;
+import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
+import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.utils.Pools;
+import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
+import ru.jengine.beancontainer.annotations.PostConstruct;
+import ru.jengine.jenginegdx.utils.IntBagUtils;
+import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBus;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.UserEvent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.UserEventHandlingComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.systems.InputProcessingSystem;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
 
-//@Bean
+import java.util.List;
+
+@Bean
 @Order(2)
 @All(MouseEventComponent.class)
 public class MouseEventDispatchingSystem extends IteratingSystem {
-    @Override
-    protected void process(int entityId) {
-
-    }
-    /*private final EventBus eventBus;
+    private final EventBus eventBus;
+    private final GameCamera camera;
+    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+    private ComponentMapper<RotationComponent> rotationComponentMapper;
+    private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
     private ComponentMapper<MouseEventComponent> mouseEventComponentMapper;
     private ComponentMapper<UserEventHandlingComponent> userEventHandlingComponentMapper;
+    private ComponentMapper<MouseTouchedComponent> mouseTouchedComponentMapper;
 
     private EntitySubscription boundSubscription;
-    private BoundEntity[] boundedEntities;
+    private List<BoundedEntity> boundedEntities;
 
-    public MouseEventDispatchingSystem(EventBus eventBus) {
+    public MouseEventDispatchingSystem(EventBus eventBus, GameCamera camera) {
         this.eventBus = eventBus;
+        this.camera = camera;
     }
 
     @Override
     protected void setWorld(World world) {
         super.setWorld(world);
-        boundSubscription = world.getAspectSubscriptionManager().get(Aspect.all(GlobalBoundComponent.class));
+        boundSubscription = world.getAspectSubscriptionManager().get(
+                Aspect.all(CoordinatesComponent.class, MouseTouchBoundComponent.class, UserEventHandlingComponent.class) //TODO переделать для иерархии объектов
+        );
+    }
+
+    @PostConstruct
+    private void setMouseTrigger() {
+        world.getSystem(InputProcessingSystem.class).registerTrigger(new MouseInputTrigger(camera));
     }
 
     @Override
     protected void begin() {
-        Pool<BoundEntity> boundEntityPool = Pools.get(BoundEntity.class);
-        boundedEntities = IntBagUtils.map(boundSubscription.getEntities(), id ->
-                        boundEntityPool.obtain()
-                                .id(id)
-                                .bound(globalBoundComponentMapper.get(id).bound))
-                .toArray(BoundEntity[]::new);
+        Pool<BoundedEntity> pool = Pools.get(BoundedEntity.class);
+        boundedEntities = IntBagUtils.map(boundSubscription.getEntities(), id -> {
+                    BoundedEntity entity = pool.obtain();
+                    entity.id = id;
+                    entity.coordinates = coordinatesComponentMapper.get(id).getCoordinates();
+                    entity.rotation = rotationComponentMapper.has(id)
+                            ? rotationComponentMapper.get(id).getRotation()
+                            : RotationComponent.DEFAULT_ROTATION;
+                    entity.boundComponent = mouseTouchBoundComponentMapper.get(id);
+                    entity.userEventHandling = userEventHandlingComponentMapper.get(id);
+                    return entity;
+                })
+                .toList();
     }
 
     @Override
     protected void process(int entityId) {
         MouseEventComponent mouseEventComponent = mouseEventComponentMapper.get(entityId);
-        Vector2 mouseCoordinates = new Vector2(mouseEventComponent.mouseX, mouseEventComponent.mouseY);
-        String eventTypeCode = mouseEventComponent.eventType.getUserEventCode();
-        for (BoundEntity boundedEntity : boundedEntities) {
-            if (boundedEntity.bound.inBound(mouseCoordinates) && userEventHandlingComponentMapper.has(boundedEntity.id)) {
-                int id = boundedEntity.id;
-                String dispatchedEvent = dispatchHierarchy(id, eventTypeCode);
-                if (dispatchedEvent != null) {
-                    eventBus.registerEvent(new MouseUserEvent(id, dispatchedEvent, mouseEventComponent.mouseX, mouseEventComponent.mouseY));
+        float mouseX = mouseEventComponent.getMouseX();
+        float mouseY = mouseEventComponent.getMouseY();
+        String eventTypeCode = mouseEventComponent.getEventType().getUserEventCode();
+
+        for (BoundedEntity entity : boundedEntities) {
+            if (entity.inBound(mouseX, mouseY)) {
+                String handling = entity.userEventHandling.getHandling(eventTypeCode);
+                if (handling != null) {
+                    mouseTouchedComponentMapper.create(entity.id).setTouched(mouseX, mouseY);
+                    eventBus.registerEvent(new UserEvent(entity.id, handling));
                 }
             }
         }
@@ -57,53 +95,30 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
 
     @Override
     protected void end() {
-        Pool<BoundEntity> boundEntityPool = Pools.get(BoundEntity.class);
-        for (BoundEntity bound : boundedEntities) {
-            boundEntityPool.free(bound);
+        Pool<BoundedEntity> pool = Pools.get(BoundedEntity.class);
+        for (BoundedEntity entity : boundedEntities) {
+            pool.free(entity);
         }
     }
 
-    @Nullable
-    private String dispatchHierarchy(int entityId, String event) {
-        if (userEventHandlingComponentMapper.has(entityId)) {
-            String handling = userEventHandlingComponentMapper.get(entityId).getHandling(event);
-            if (handling != null) {
-                return handling;
-            }
-        }
-
-        if (hierarchyChildrenComponentMapper.has(entityId)) {
-            IntBag children = hierarchyChildrenComponentMapper.get(entityId).children;
-            int[] ids = children.getData();
-            for (int i = 0, size = children.size(); i < size; i++) {
-                String handling = dispatchHierarchy(ids[i], event);
-                if (handling != null) {
-                    return handling;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private static class BoundEntity implements Poolable {
+    private static class BoundedEntity implements Poolable {
         private int id;
-        private PositionedFigure bound;
+        private Vector3 coordinates;
+        private float rotation;
+        private MouseTouchBoundComponent boundComponent;
+        private UserEventHandlingComponent userEventHandling;
 
-        public BoundEntity id(int id) {
-            this.id = id;
-            return this;
-        }
-
-        public BoundEntity bound(PositionedFigure bound) {
-            this.bound = bound;
-            return this;
+        public boolean inBound(float x, float y) {
+            return boundComponent.inBound(x, y, coordinates.x, coordinates.y, rotation);
         }
 
         @Override
         public void reset() {
             this.id = -1;
-            this.bound = null;
+            this.coordinates = Vector3.Zero;
+            this.rotation = RotationComponent.DEFAULT_ROTATION;
+            this.boundComponent = null;
+            this.userEventHandling = null;
         }
-    }*/
+    }
 }
