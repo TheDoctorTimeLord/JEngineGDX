@@ -5,7 +5,7 @@ import com.artemis.systems.IteratingSystem;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.Constants.SystemOrder;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.mouse.MouseEventComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.mouse.MouseEventComponent;
 
 @Bean
 @Order(SystemOrder.CLEARING_SYSTEMS + 3)

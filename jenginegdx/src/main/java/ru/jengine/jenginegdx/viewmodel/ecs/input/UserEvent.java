@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.userevents;
+package ru.jengine.jenginegdx.viewmodel.ecs.input;
 
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBusEvent;
 

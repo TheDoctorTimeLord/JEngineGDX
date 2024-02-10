@@ -50,3 +50,4 @@ public class GlobalBoundRecalculationSystem extends IteratingSystem {
                 || rotationComponentMapper.has(entityId) && rotationComponentMapper.get(entityId).isDirty();
     }
 }
+

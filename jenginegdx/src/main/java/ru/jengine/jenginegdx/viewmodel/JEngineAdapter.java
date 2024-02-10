@@ -1,7 +1,6 @@
 package ru.jengine.jenginegdx.viewmodel;
 
 import com.badlogic.gdx.ApplicationAdapter;
-
 import ru.jengine.beancontainer.JEngineContainer;
 import ru.jengine.beancontainer.configuration.ContainerConfiguration;
 import ru.jengine.beancontainer.configuration.DefaultContainerConfigurationBuilder;
@@ -31,7 +30,7 @@ public abstract class JEngineAdapter extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-
+        //TODO добавить действия при ресайзе
     }
 
     @Override

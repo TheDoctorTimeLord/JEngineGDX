@@ -1,11 +1,10 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.input.mouse;
+package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.EventGenerator;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.UserInputTrigger;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.mouse.MouseEventComponent.MouseEventType;
 
 @Bean
 public class MouseInputTrigger extends UserInputTrigger {
@@ -13,6 +12,7 @@ public class MouseInputTrigger extends UserInputTrigger {
     private float currentMouseX;
     private float currentMouseY;
     private MouseEventType eventType;
+    private boolean hasInput = false;
 
     public MouseInputTrigger(GameCamera gameCamera) {
         this.gameCamera = gameCamera;
@@ -20,9 +20,9 @@ public class MouseInputTrigger extends UserInputTrigger {
 
     @Override
     public void attachReceivedUserInput(EventGenerator eventGenerator) {
-        if (eventType != null) {
+        if (hasInput) {
+            hasInput = false;
             MouseEventType type = eventType;
-            eventType = null;
 
             Vector3 screenCoordinates = new Vector3(currentMouseX, currentMouseY, 0);
             Vector3 worldCoordinates = gameCamera.getCamera().unproject(screenCoordinates);
@@ -39,6 +39,7 @@ public class MouseInputTrigger extends UserInputTrigger {
         currentMouseX = screenX;
         currentMouseY = screenY;
         eventType = MouseEventType.TOUCH_DOWN;
+        hasInput = true;
         return true;
     }
 
@@ -46,7 +47,10 @@ public class MouseInputTrigger extends UserInputTrigger {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         currentMouseX = screenX;
         currentMouseY = screenY;
-        eventType = MouseEventType.TOUCH_UP;
+        eventType = MouseEventType.DRAGGING.equals(eventType)
+                ? MouseEventType.DRAGGED_TO
+                : MouseEventType.TOUCH_UP;
+        hasInput = true;
         return true;
     }
 
@@ -55,6 +59,7 @@ public class MouseInputTrigger extends UserInputTrigger {
         currentMouseX = screenX;
         currentMouseY = screenY;
         eventType = MouseEventType.DRAGGING;
+        hasInput = true;
         return true;
     }
 
@@ -63,6 +68,7 @@ public class MouseInputTrigger extends UserInputTrigger {
         currentMouseX = screenX;
         currentMouseY = screenY;
         eventType = MouseEventType.MOVE;
+        hasInput = true;
         return true;
     }
 }

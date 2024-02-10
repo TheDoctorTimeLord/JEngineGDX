@@ -16,7 +16,6 @@ import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
 @One({CoordinatesComponent.class, RotationComponent.class, BoundComponent.class, HierarchyChildrenComponent.class})
 public class DirtyCleaner extends IteratingSystem {
     //TODO автоматизировать очищение
-    //TODO подумать над маркеровочным компонентом Dirty
     private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<RotationComponent> rotationComponentMapper;
     private ComponentMapper<BoundComponent> boundComponentMapper;

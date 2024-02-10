@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.input.mouse;
+package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -8,6 +8,9 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pool.Poolable;
+import com.badlogic.gdx.utils.Pools;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.Constants.SystemOrder;
@@ -16,8 +19,7 @@ import ru.jengine.jenginegdx.utils.figures.PositionedFigure;
 import ru.jengine.jenginegdx.viewmodel.ecs.bounds.GlobalBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.HierarchyChildrenComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.userevents.UserEvent;
-import ru.jengine.jenginegdx.viewmodel.ecs.userevents.UserEventHandlingComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.UserEventHandlingComponent;
 
 import javax.annotation.Nullable;
 
@@ -46,8 +48,11 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
 
     @Override
     protected void begin() {
+        Pool<BoundEntity> boundEntityPool = Pools.get(BoundEntity.class);
         boundedEntities = IntBagUtils.map(boundSubscription.getEntities(), id ->
-                new BoundEntity(id, globalBoundComponentMapper.get(id).bound))
+                        boundEntityPool.obtain()
+                                .id(id)
+                                .bound(globalBoundComponentMapper.get(id).bound))
                 .toArray(BoundEntity[]::new);
     }
 
@@ -61,9 +66,17 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
                 int id = boundedEntity.id;
                 String dispatchedEvent = dispatchHierarchy(id, eventTypeCode);
                 if (dispatchedEvent != null) {
-                    eventBus.registerEvent(new UserEvent(id, dispatchedEvent));
+                    eventBus.registerEvent(new MouseUserEvent(id, dispatchedEvent, mouseEventComponent.mouseX, mouseEventComponent.mouseY));
                 }
             }
+        }
+    }
+
+    @Override
+    protected void end() {
+        Pool<BoundEntity> boundEntityPool = Pools.get(BoundEntity.class);
+        for (BoundEntity bound : boundedEntities) {
+            boundEntityPool.free(bound);
         }
     }
 
@@ -90,13 +103,24 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
         return null;
     }
 
-    private static class BoundEntity {
-        private final int id;
-        private final PositionedFigure bound;
+    private static class BoundEntity implements Poolable {
+        private int id;
+        private PositionedFigure bound;
 
-        private BoundEntity(int id, PositionedFigure bound) {
+        public BoundEntity id(int id) {
             this.id = id;
+            return this;
+        }
+
+        public BoundEntity bound(PositionedFigure bound) {
             this.bound = bound;
+            return this;
+        }
+
+        @Override
+        public void reset() {
+            this.id = -1;
+            this.bound = null;
         }
     }
 }

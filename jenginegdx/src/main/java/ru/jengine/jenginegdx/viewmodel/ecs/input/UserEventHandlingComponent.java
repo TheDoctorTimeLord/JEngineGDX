@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.userevents;
+package ru.jengine.jenginegdx.viewmodel.ecs.input;
 
 import com.artemis.Component;
 
