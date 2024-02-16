@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching;
+package ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems;
 
 import com.artemis.BaseSystem;
 import ru.jengine.beancontainer.annotations.Bean;
@@ -6,6 +6,8 @@ import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PreDestroy;
 import ru.jengine.eventqueue.Dispatcher;
 import ru.jengine.eventqueue.event.PostHandler;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.ClientEventPoolHandler;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBusEvent;
 
 import java.util.List;
 

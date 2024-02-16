@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
+package ru.jengine.jenginegdx.viewmodel.ecs.mouse.systems;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -15,17 +15,21 @@ import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PostConstruct;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
-import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBus;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.UserEvent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.UserEventHandlingComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.systems.InputProcessingSystem;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseEventComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.mouse.MouseInputTrigger;
+import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 
 import java.util.List;
 
 @Bean
-@Order(2)
+@Order(3)
 @All(MouseEventComponent.class)
 public class MouseEventDispatchingSystem extends IteratingSystem {
     private final EventBus eventBus;
@@ -84,13 +88,14 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
 
         for (BoundedEntity entity : boundedEntities) {
             if (entity.inBound(mouseX, mouseY)) {
+                mouseTouchedComponentMapper.create(entity.id).setTouched(mouseX, mouseY);
                 String handling = entity.userEventHandling.getHandling(eventTypeCode);
                 if (handling != null) {
-                    mouseTouchedComponentMapper.create(entity.id).setTouched(mouseX, mouseY);
                     eventBus.registerEvent(new UserEvent(entity.id, handling));
                 }
             }
         }
+        world.delete(entityId);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.rendering;
+package ru.jengine.jenginegdx.viewmodel.ecs.rendering.systems;
 
 import com.artemis.World;
 import com.artemis.annotations.All;
@@ -10,6 +10,8 @@ import ru.jengine.beancontainer.annotations.PostConstruct;
 import ru.jengine.jenginegdx.container.JEngineGdxConfiguration;
 import ru.jengine.jenginegdx.viewmodel.ecs.SortedByZIteratingSystem;
 import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
+import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
+import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
 
 import java.util.List;
 

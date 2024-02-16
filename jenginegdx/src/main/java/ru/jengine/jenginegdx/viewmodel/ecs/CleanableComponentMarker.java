@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Bean //TODO удалить @Bean, когда выполнено нижнее
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InputComponentMarker { //TODO сделать возможность получения всех маркерованных объектов контейнера
+public @interface CleanableComponentMarker { //TODO сделать возможность получения всех маркерованных объектов контейнера
 }

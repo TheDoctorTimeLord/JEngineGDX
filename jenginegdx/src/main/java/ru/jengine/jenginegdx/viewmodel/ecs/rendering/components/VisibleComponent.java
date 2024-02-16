@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.rendering;
+package ru.jengine.jenginegdx.viewmodel.ecs.rendering.components;
 
 import com.artemis.PooledComponent;
 

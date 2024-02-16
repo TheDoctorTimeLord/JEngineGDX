@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.EventGenerator;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.InputTrigger;
+import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseEventComponent;
 
 public class MouseInputTrigger extends InputTrigger {
     private final GameCamera gameCamera;
@@ -26,8 +27,7 @@ public class MouseInputTrigger extends InputTrigger {
             Vector3 worldCoordinates = gameCamera.getCamera().unproject(screenCoordinates);
 
             eventGenerator.generate(MouseEventComponent.class)
-                    .mouseX(worldCoordinates.x)
-                    .mouseY(worldCoordinates.y)
+                    .mousePosition(worldCoordinates.x, worldCoordinates.y)
                     .eventType(type);
         }
     }

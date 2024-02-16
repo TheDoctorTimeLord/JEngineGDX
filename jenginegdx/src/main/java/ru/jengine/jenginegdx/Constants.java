@@ -15,5 +15,6 @@ public interface Constants {
 
     interface UserEvents {
         String DRAG_AND_DROP = "dragAndDrop";
+        String DROP_TO = "dropTo";
     }
 }

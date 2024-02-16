@@ -3,7 +3,7 @@ package ru.jengine.jenginegdx.viewmodel.transport.eventbus;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.RemoveAfterInitialize;
 import ru.jengine.eventqueue.event.PostHandler;
-import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.EventBus;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.transport.viewmodel.ViewModelTransportHolder;
 
 @Bean

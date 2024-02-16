@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.input;
+package ru.jengine.jenginegdx.viewmodel.ecs.input.components;
 
 import com.artemis.Component;
 

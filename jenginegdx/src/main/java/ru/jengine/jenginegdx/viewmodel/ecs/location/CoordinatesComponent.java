@@ -6,8 +6,8 @@ import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
 public class CoordinatesComponent extends CanDirtyPooledComponent {
     private Vector3 coordinates;
 
-    public CoordinatesComponent coordinates(Vector3 coordinates) {
-        this.coordinates = coordinates;
+    public CoordinatesComponent coordinates(float x, float y, float z) {
+        this.coordinates = new Vector3(x, y, z);
         dirty();
         return this;
     }
@@ -18,6 +18,6 @@ public class CoordinatesComponent extends CanDirtyPooledComponent {
 
     @Override
     protected void reset() {
-        coordinates(Vector3.Zero);
+        this.coordinates = Vector3.Zero;
     }
 }

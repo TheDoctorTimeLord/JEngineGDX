@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
+package ru.jengine.jenginegdx.viewmodel.ecs.mouse.components;
 
 import com.artemis.PooledComponent;
 import ru.jengine.jenginegdx.utils.MathUtils;

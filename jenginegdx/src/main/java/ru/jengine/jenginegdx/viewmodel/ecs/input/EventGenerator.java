@@ -1,6 +1,7 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.input;
 
 import com.artemis.World;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.components.InputComponent;
 
 public class EventGenerator {
     private final World world;

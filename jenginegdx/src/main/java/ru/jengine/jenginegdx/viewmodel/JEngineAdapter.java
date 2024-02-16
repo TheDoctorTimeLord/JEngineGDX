@@ -1,6 +1,7 @@
 package ru.jengine.jenginegdx.viewmodel;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import ru.jengine.beancontainer.JEngineContainer;
 import ru.jengine.beancontainer.configuration.ContainerConfiguration;
 import ru.jengine.beancontainer.configuration.DefaultContainerConfigurationBuilder;
@@ -35,6 +36,7 @@ public abstract class JEngineAdapter extends ApplicationAdapter {
 
     @Override
     public void render() {
+        worldHolder.getWorld().setDelta(Gdx.graphics.getDeltaTime());
         worldHolder.update();
     }
 
