@@ -10,7 +10,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 
 @Bean
-public class TextureRenderSubsystem implements RenderSubsystem {
+public class TextureRenderSubsystem extends RenderSubsystem {
     private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<TextureComponent> textureComponentMapper;
     private ComponentMapper<TextureBoundComponent> textureBoundComponentMapper;

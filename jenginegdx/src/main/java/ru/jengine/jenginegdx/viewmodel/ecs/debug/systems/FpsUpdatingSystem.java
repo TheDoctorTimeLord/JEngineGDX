@@ -10,6 +10,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.view.text.TextComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
 
 @Bean
@@ -18,6 +19,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent
 public class FpsUpdatingSystem extends IteratingSystem {
     private static final float FPS_WIDTH = 70;
 
+    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<TextComponent> textComponentMapper;
     private ComponentMapper<VisibleComponent> visibleComponentMapper;
 
@@ -33,10 +35,14 @@ public class FpsUpdatingSystem extends IteratingSystem {
         BitmapFont font = new BitmapFont();
         font.setColor(Color.WHITE);
 
+        coordinatesComponentMapper.create(entityId).coordinates(
+                (float) Gdx.graphics.getWidth() / 2 - FPS_WIDTH,
+                (float) Gdx.graphics.getHeight() / 2 - 20,
+                0
+        );
         visibleComponentMapper.create(entityId);
         return textComponentMapper.create(entityId)
                 .font(font)
-                .textPosition((float) Gdx.graphics.getWidth() / 2 - FPS_WIDTH, (float) Gdx.graphics.getHeight() / 2 - 20)
                 .width(FPS_WIDTH);
     }
 }

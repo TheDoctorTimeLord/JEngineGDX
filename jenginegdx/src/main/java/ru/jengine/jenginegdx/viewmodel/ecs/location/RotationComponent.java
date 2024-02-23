@@ -1,7 +1,9 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.location;
 
 import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.cleaning.CanBeDirty;
 
+@CanBeDirty
 public class RotationComponent extends CanDirtyPooledComponent {
     public static final float DEFAULT_ROTATION = 0;
 

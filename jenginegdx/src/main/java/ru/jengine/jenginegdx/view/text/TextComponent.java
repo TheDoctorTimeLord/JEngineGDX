@@ -8,8 +8,8 @@ public class TextComponent extends PooledComponent {
     private BitmapFont font;
     private String text;
     private float width;
-    private float textX;
-    private float textY;
+    private float xOffsetToText;
+    private float yOffsetToText;
 
     public TextComponent font(BitmapFont font) {
         this.font = font;
@@ -27,9 +27,9 @@ public class TextComponent extends PooledComponent {
         return this;
     }
 
-    public TextComponent textPosition(float x, float y) {
-        this.textX = x;
-        this.textY = y;
+    public TextComponent textPosition(float xOffset, float yOffset) {
+        this.xOffsetToText = xOffset;
+        this.yOffsetToText = yOffset;
         return this;
     }
 
@@ -45,12 +45,12 @@ public class TextComponent extends PooledComponent {
         return width;
     }
 
-    public float getTextX() {
-        return textX;
+    public float getXOffsetToText() {
+        return xOffsetToText;
     }
 
-    public float getTextY() {
-        return textY;
+    public float getYOffsetToText() {
+        return yOffsetToText;
     }
 
     @Override

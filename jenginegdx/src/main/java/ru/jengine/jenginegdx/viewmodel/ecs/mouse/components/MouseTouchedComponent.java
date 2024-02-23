@@ -1,7 +1,7 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse.components;
 
 import com.artemis.PooledComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.CleanableComponentMarker;
+import ru.jengine.jenginegdx.viewmodel.ecs.cleaning.CleanableComponentMarker;
 
 @CleanableComponentMarker
 public class MouseTouchedComponent extends PooledComponent {

@@ -10,7 +10,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 import java.util.Comparator;
 
 public abstract class SortedByZIteratingSystem extends BaseEntitySystem {
-    private ComponentMapper<CoordinatesComponent> transformComponentMapper;
+    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
     private Comparator<Integer> additionalComparator = (id1, id2) -> 0;
     private int[] sortedEntities;
     private boolean nonDirty = false;
@@ -46,14 +46,24 @@ public abstract class SortedByZIteratingSystem extends BaseEntitySystem {
     protected abstract void process(int entityId);
 
     private void updateSortedEntities() {
+        IntBag actives = subscription.getEntities();
+        int[] ids = actives.getData();
+
+        for (int i = 0, size = actives.size(); i < size; i++) {
+            int id = ids[i];
+            if (coordinatesComponentMapper.has(id) && coordinatesComponentMapper.get(id).isDirty()) {
+                nonDirty = false;
+                break;
+            }
+        }
+
         if (sortedEntities != null && nonDirty) {
             return;
         }
 
-        IntBag actives = subscription.getEntities();
         sortedEntities =
-                IntBagUtils.map(actives, id -> transformComponentMapper.has(id)
-                        ? new OrderedEntity(id, transformComponentMapper.get(id).getCoordinates().z)
+                IntBagUtils.map(actives, id -> coordinatesComponentMapper.has(id)
+                        ? new OrderedEntity(id, coordinatesComponentMapper.get(id).getCoordinates().z)
                         : new OrderedEntity(id, Float.NEGATIVE_INFINITY))
                 .sorted((e1, e2) -> {
                     int comparingResult = Float.compare(e1.order, e2.order);
