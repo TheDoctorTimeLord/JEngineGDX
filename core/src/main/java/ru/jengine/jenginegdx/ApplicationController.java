@@ -68,7 +68,7 @@ public class ApplicationController extends JEngineAdapter {
 		entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
 		entity.create(DraggingSettingsSettings.class).setDraggableType("simple");
 		entity.create(UserEventHandlingComponent.class)
-				.addHandling(InputEvents.MOUSE_DRAGGING, UserEvents.DRAG_AND_DROP)
+				.addHandling(InputEvents.MOUSE_START_DRAGGING, UserEvents.DRAG_AND_DROP)
 				.addHandling(InputEvents.MOUSE_DRAGGED_TO, UserEvents.DROP_TO);
 	}
 
@@ -99,6 +99,7 @@ public class ApplicationController extends JEngineAdapter {
 				.addHandling(InputEvents.MOUSE_TOUCH_DOWN, InputEvents.MOUSE_TOUCH_DOWN)
 				.addHandling(InputEvents.MOUSE_TOUCH_UP, InputEvents.MOUSE_TOUCH_UP)
 				.addHandling(InputEvents.MOUSE_MOVE, InputEvents.MOUSE_MOVE)
+				.addHandling(InputEvents.MOUSE_START_DRAGGING, InputEvents.MOUSE_START_DRAGGING)
 				.addHandling(InputEvents.MOUSE_DRAGGING, InputEvents.MOUSE_DRAGGING)
 				.addHandling(InputEvents.MOUSE_DRAGGED_TO, InputEvents.MOUSE_DRAGGED_TO);
 	}

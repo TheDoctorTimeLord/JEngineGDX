@@ -56,7 +56,9 @@ public class MouseInputTrigger extends InputTrigger {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         currentMouseX = screenX;
         currentMouseY = screenY;
-        eventType = MouseEventType.DRAGGING;
+        eventType = MouseEventType.DRAGGING.equals(eventType) || MouseEventType.START_DRAGGING.equals(eventType)
+                ? MouseEventType.DRAGGING
+                : MouseEventType.START_DRAGGING;
         hasInput = true;
         return true;
     }
