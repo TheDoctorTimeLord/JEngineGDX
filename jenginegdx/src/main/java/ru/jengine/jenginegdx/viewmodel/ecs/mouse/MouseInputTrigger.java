@@ -1,7 +1,7 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse;
 
 import com.badlogic.gdx.math.Vector3;
-import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
+import ru.jengine.jenginegdx.viewmodel.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.EventGenerator;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.InputTrigger;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseEventComponent;

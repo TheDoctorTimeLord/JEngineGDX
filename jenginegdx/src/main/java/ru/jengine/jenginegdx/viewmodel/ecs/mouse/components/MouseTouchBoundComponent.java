@@ -2,7 +2,9 @@ package ru.jengine.jenginegdx.viewmodel.ecs.mouse.components;
 
 import com.artemis.PooledComponent;
 import ru.jengine.jenginegdx.utils.MathUtils;
+import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
+@ExternalAddable
 public class MouseTouchBoundComponent extends PooledComponent {
     private float width;
     private float height;

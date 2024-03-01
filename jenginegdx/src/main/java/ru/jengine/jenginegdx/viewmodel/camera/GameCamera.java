@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.camera;
+package ru.jengine.jenginegdx.viewmodel.camera;
 
 import com.badlogic.gdx.graphics.Camera;
 import ru.jengine.beancontainer.annotations.Bean;

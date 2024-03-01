@@ -14,7 +14,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PostConstruct;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
-import ru.jengine.jenginegdx.viewmodel.ecs.camera.GameCamera;
+import ru.jengine.jenginegdx.viewmodel.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;

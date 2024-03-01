@@ -2,9 +2,11 @@ package ru.jengine.jenginegdx.viewmodel.ecs.location;
 
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 import ru.jengine.jenginegdx.viewmodel.ecs.cleaning.CanBeDirty;
 
 @CanBeDirty
+@ExternalAddable
 public class CoordinatesComponent extends CanDirtyPooledComponent {
     private Vector3 coordinates;
 

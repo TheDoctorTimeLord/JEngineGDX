@@ -13,8 +13,8 @@ import java.util.List;
 
 @Bean
 @Order(0)
-public class CleanableComponentClingingSystem extends MarkerComponentsSystem {
-    public CleanableComponentClingingSystem(@ClassesWith(CleanableComponentMarker.class) List<Class<?>> inputComponents) {
+public class CleanableComponentCleaningSystem extends MarkerComponentsSystem {
+    public CleanableComponentCleaningSystem(@ClassesWith(CleanableComponentMarker.class) List<Class<?>> inputComponents) {
         super(CleanableComponentMarker.class, inputComponents);
     }
 
