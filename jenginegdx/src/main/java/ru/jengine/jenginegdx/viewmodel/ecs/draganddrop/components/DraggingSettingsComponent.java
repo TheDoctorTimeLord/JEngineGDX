@@ -1,8 +1,10 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components;
 
 import com.artemis.PooledComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
-public class DraggingSettingsSettings extends PooledComponent {
+@ExternalAddable
+public class DraggingSettingsComponent extends PooledComponent {
     private String draggableType;
 
     public void setDraggableType(String draggableType) {

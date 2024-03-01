@@ -12,11 +12,14 @@ import ru.jengine.jenginegdx.Constants.Contexts;
 import ru.jengine.jenginegdx.Constants.InputEvents;
 import ru.jengine.jenginegdx.Constants.UserEvents;
 import ru.jengine.jenginegdx.container.JEngineGdxConfiguration;
+import ru.jengine.jenginegdx.view.texture.TextureBoundComponent;
 import ru.jengine.jenginegdx.view.texture.TextureComponent;
 import ru.jengine.jenginegdx.viewmodel.JEngineAdapter;
 import ru.jengine.jenginegdx.viewmodel.ecs.WorldHolder;
 import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsSettings;
+import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.DroppedHandler;
+import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedContainerComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
@@ -47,6 +50,7 @@ public class ApplicationController extends JEngineAdapter {
 		//spawnGridEntities(container, width, height);
 		spawnSingleEntity(container,-100);
 		spawnSingleEntity(container, 100);
+		spawnDroppableEntity(container, width, height);
 
 		attachMouseListener(container, width, height);
 		attachFpsTracker(container);
@@ -66,10 +70,38 @@ public class ApplicationController extends JEngineAdapter {
 		entity.create(TextureComponent.class).texture(img);
 		entity.create(VisibleComponent.class);
 		entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
-		entity.create(DraggingSettingsSettings.class).setDraggableType("simple");
+		entity.create(DraggingSettingsComponent.class).setDraggableType("simple");
 		entity.create(UserEventHandlingComponent.class)
 				.addHandling(InputEvents.MOUSE_START_DRAGGING, UserEvents.DRAG_AND_DROP)
 				.addHandling(InputEvents.MOUSE_DRAGGED_TO, UserEvents.DROP_TO);
+	}
+
+	private void spawnDroppableEntity(JEngineContainer container, int width, int height) {
+		World world = container.getBean(WorldHolder.class).getWorld();
+
+		EntityEdit entity = world.createEntity().edit();
+		entity.create(CoordinatesComponent.class).coordinates((float) -width / 2, (float) -height / 2, -100);
+		entity.create(TextureComponent.class).texture(img);
+		entity.create(TextureBoundComponent.class).bound((float) width / 2, height);
+		entity.create(VisibleComponent.class);
+		entity.create(MouseTouchBoundComponent.class).bounds((float) width / 2, height);
+		entity.create(DroppedContainerComponent.class).droppedHandler("simple", new DroppedHandler(world) {
+			private ComponentMapper<TextureBoundComponent> textureBoundComponentMapper;
+			private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
+			@Override
+			public void handle(int target, int container, float droppedX, float droppedY, float xOffsetToMouse, float yOffsetToMouse,
+							   String draggingType)
+			{
+//				TextureBoundComponent textureBound = textureBoundComponentMapper.has(target)
+//						? textureBoundComponentMapper.get(target)
+//						: textureBoundComponentMapper.create(target);
+//				textureBound.bound(100, 100);
+//
+//				if (mouseTouchBoundComponentMapper.has(target)) {
+//					mouseTouchBoundComponentMapper.get(target).bounds(100, 100);
+//				}
+			}
+		});
 	}
 
 	private void spawnGridEntities(JEngineContainer container, int width, int height) {
