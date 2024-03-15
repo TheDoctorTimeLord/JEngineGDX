@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.annotations.Bean;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 
 @Bean
 public class TextureRenderSubsystem extends RenderSubsystem {
-    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+    private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<TextureComponent> textureComponentMapper;
     private ComponentMapper<TextureBoundComponent> textureBoundComponentMapper;
     private ComponentMapper<RotationComponent> rotationComponentMapper;

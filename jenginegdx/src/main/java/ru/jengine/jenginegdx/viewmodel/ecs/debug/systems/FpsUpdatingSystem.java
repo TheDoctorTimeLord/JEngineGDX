@@ -10,7 +10,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.view.text.TextComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
 
 @Bean
@@ -19,7 +19,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent
 public class FpsUpdatingSystem extends IteratingSystem {
     private static final float FPS_WIDTH = 70;
 
-    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+    private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<TextComponent> textComponentMapper;
     private ComponentMapper<VisibleComponent> visibleComponentMapper;
 

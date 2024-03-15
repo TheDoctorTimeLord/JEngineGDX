@@ -15,7 +15,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettin
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
@@ -28,7 +28,7 @@ public class DraggingSystem extends BaseSystem {
     private EntitySubscription containerDroppedSubscription;
     private DragAndDropListener listener;
 
-    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+    private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<DraggingComponent> draggingComponentMapper;
     private ComponentMapper<DraggingSettingsComponent> draggingSettingsComponentMapper;
     private ComponentMapper<MouseTouchedComponent> mouseTouchedComponentMapper;
@@ -41,9 +41,9 @@ public class DraggingSystem extends BaseSystem {
         super.setWorld(world);
 
         draggingSubscription = world.getAspectSubscriptionManager().get(
-                Aspect.all(CoordinatesComponent.class, DraggingComponent.class));
+                Aspect.all(AbsoluteCoordinatesComponent.class, DraggingComponent.class));
         containerDroppedSubscription = world.getAspectSubscriptionManager().get(
-                Aspect.all(CoordinatesComponent.class, MouseTouchBoundComponent.class, DroppedContainerComponent.class));
+                Aspect.all(AbsoluteCoordinatesComponent.class, MouseTouchBoundComponent.class, DroppedContainerComponent.class));
     }
 
     @PostConstruct
@@ -62,14 +62,14 @@ public class DraggingSystem extends BaseSystem {
                 if (draggableEntityId != -1) {
                     listener.setListenerMode(ListenerMode.WAITED);
                     MouseTouchedComponent mouse = mouseTouchedComponentMapper.get(draggableEntityId);
-                    CoordinatesComponent coordinatesComponent = coordinatesComponentMapper.get(draggableEntityId);
-                    Vector3 coordinates = coordinatesComponent.getCoordinates();
+                    AbsoluteCoordinatesComponent absoluteCoordinatesComponent = coordinatesComponentMapper.get(draggableEntityId);
+                    Vector3 coordinates = absoluteCoordinatesComponent.getCoordinates();
                     draggingComponentMapper.create(draggableEntityId)
                             .setOffsetToMouse(
                                     mouse.getX() - coordinates.x,
                                     mouse.getY() - coordinates.y)
                             .setPreviousCoordinates(coordinates);
-                    coordinatesComponent.coordinates(coordinates.x, coordinates.y, Float.POSITIVE_INFINITY);
+                    absoluteCoordinatesComponent.coordinates(coordinates.x, coordinates.y, Float.POSITIVE_INFINITY);
                 }
             }
             case WAITED -> {
@@ -121,7 +121,7 @@ public class DraggingSystem extends BaseSystem {
                     }
                 }
 
-                CoordinatesComponent coordinates = coordinatesComponentMapper.get(draggableEntityId);
+                AbsoluteCoordinatesComponent coordinates = coordinatesComponentMapper.get(draggableEntityId);
                 Vector3 oldCoords = dragging.getPreviousCoordinate();
                 Vector3 newCoords = coordinates.getCoordinates();
                 coordinates.coordinates(
@@ -141,14 +141,14 @@ public class DraggingSystem extends BaseSystem {
     }
 
     private static class DragAndDropListener extends SinglePostHandler<UserEvent> {
-        private final ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+        private final ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
         private final ComponentMapper<DraggingComponent> draggingComponentMapper;
         private final ComponentMapper<DraggingSettingsComponent> draggingSettingsMapper;
         private ListenerMode listenerMode;
         private int draggableEntityId;
         private float maxZ;
 
-        public DragAndDropListener(ComponentMapper<CoordinatesComponent> coordinatesComponentMapper,
+        public DragAndDropListener(ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper,
                                    ComponentMapper<DraggingComponent> draggingComponentMapper,
                                    ComponentMapper<DraggingSettingsComponent> draggingSettingsMapper)
         {

@@ -19,7 +19,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.systems.InputProcessingSystem;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseEventComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.MouseInputTrigger;
@@ -34,7 +34,7 @@ import java.util.List;
 public class MouseEventDispatchingSystem extends IteratingSystem {
     private final EventBus eventBus;
     private final GameCamera camera;
-    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+    private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<RotationComponent> rotationComponentMapper;
     private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
     private ComponentMapper<MouseEventComponent> mouseEventComponentMapper;
@@ -53,7 +53,7 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
     protected void setWorld(World world) {
         super.setWorld(world);
         boundSubscription = world.getAspectSubscriptionManager().get(
-                Aspect.all(CoordinatesComponent.class, MouseTouchBoundComponent.class, UserEventHandlingComponent.class) //TODO переделать для иерархии объектов
+                Aspect.all(AbsoluteCoordinatesComponent.class, MouseTouchBoundComponent.class, UserEventHandlingComponent.class) //TODO переделать для иерархии объектов
         );
     }
 
