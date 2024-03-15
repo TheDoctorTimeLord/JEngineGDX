@@ -20,6 +20,18 @@ public class CoordinatesComponent extends CanDirtyPooledComponent {
         return this;
     }
 
+    public float x(){
+        return coordinates.x;
+    }
+
+    public float y(){
+        return coordinates.y;
+    }
+
+    public float z(){
+        return coordinates.z;
+    }
+
     public Vector3 getCoordinates() {
         return coordinates;
     }
