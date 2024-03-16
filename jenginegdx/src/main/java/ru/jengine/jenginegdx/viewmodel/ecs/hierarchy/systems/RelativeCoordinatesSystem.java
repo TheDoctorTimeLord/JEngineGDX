@@ -10,7 +10,6 @@ import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.RelativeCoordina
 import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 
 @Bean
-@Order(100)
 @All({RelativeCoordinatesComponent.class, CoordinatesComponent.class, HierarchyComponent.class})
 public class RelativeCoordinatesSystem extends IteratingSystem {
     protected ComponentMapper<RelativeCoordinatesComponent> mRC;
@@ -24,19 +23,19 @@ public class RelativeCoordinatesSystem extends IteratingSystem {
         CoordinatesComponent cp = mC.get(i);
 
         if (!rcp.isDirty()) return;
+        rcp.clear();
         if (hp.ParentId == -1) {
             cp.coordinates(rcp.x(), rcp.y(), rcp.z());
-        } else {
+            allignTree(i);
+        }
+        else {
             allignTree(hp.ParentId);
         }
-
-        rcp.clear();
     }
 
     void allignTree(int i) {
         HierarchyComponent hp = mH.get(i);
         CoordinatesComponent cp = mC.get(i);
-
         for (int k : hp.ChildrenId) {
             CoordinatesComponent _cp = mC.get(k);
             RelativeCoordinatesComponent _rcp = mRC.get(k);
