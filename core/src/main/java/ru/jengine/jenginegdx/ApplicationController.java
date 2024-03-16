@@ -22,12 +22,18 @@ import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedContain
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.Hierarchy;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.RelativeCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ApplicationController extends JEngineAdapter {
 	private Texture img;
@@ -48,9 +54,11 @@ public class ApplicationController extends JEngineAdapter {
 		int height = Gdx.graphics.getHeight();
 
 		//spawnGridEntities(container, width, height);
-		spawnSingleEntity(container,-100);
-		spawnSingleEntity(container, 100);
-		spawnDroppableEntity(container, width, height);
+		int a = spawnSingleEntity(container,0);
+		int b = spawnSingleEntity(container, 0);
+		int c = spawnSingleEntity(container, 0);
+		int d = spawnSingleEntity(container, 0);
+		//spawnDroppableEntity(container, width, height);
 
 		attachMouseListener(container, width, height);
 		attachFpsTracker(container);
@@ -59,10 +67,32 @@ public class ApplicationController extends JEngineAdapter {
 		World world = container.getBean(WorldHolder.class).getWorld();
 		eventBus.registerHandler(new UserEventSinglePostHandler(world));
 
+		addHierarchyComponents(world, a);
+		addHierarchyComponents(world, b);
+		addHierarchyComponents(world, c);
+		addHierarchyComponents(world, d);
+
+		Timer t = new Timer();
+
+		t.schedule(new TimerTask() {
+			public void run() {
+				RelativeCoordinatesComponent r = world.getEntity(b).getComponent(RelativeCoordinatesComponent.class);
+				r.coordinates(r.x(), r.y()-10, r.z());
+			}
+		}, 0, 100);
+
+		world.getEntity(d).getComponent(RelativeCoordinatesComponent.class).coordinates(0,-200,0);
+		world.getEntity(a).getComponent(RelativeCoordinatesComponent.class).coordinates(-300,0,0);
+
+		Hierarchy hierarchy = new Hierarchy(world);
+		hierarchy.addChild(a,b);
+		hierarchy.addChild(b,c);
+		hierarchy.addChild(b,d);
+
 		Gdx.app.log("dependency", TestDependency.VALUE);
 	}
 
-	private void spawnSingleEntity(JEngineContainer container, float xOffset) {
+	private int spawnSingleEntity(JEngineContainer container, float xOffset) {
 		World world = container.getBean(WorldHolder.class).getWorld();
 
 		EntityEdit entity = world.createEntity().edit();
@@ -74,6 +104,14 @@ public class ApplicationController extends JEngineAdapter {
 		entity.create(UserEventHandlingComponent.class)
 				.addHandling(InputEvents.MOUSE_START_DRAGGING, UserEvents.DRAG_AND_DROP)
 				.addHandling(InputEvents.MOUSE_DRAGGED_TO, UserEvents.DROP_TO);
+
+		return entity.getEntityId();
+	}
+
+	private void addHierarchyComponents(World world, int i){
+		EntityEdit entity = world.getEntity(i).edit();
+		entity.create(HierarchyComponent.class);
+		entity.create(RelativeCoordinatesComponent.class).coordinates(100,0,0);
 	}
 
 	private void spawnDroppableEntity(JEngineContainer container, int width, int height) {
