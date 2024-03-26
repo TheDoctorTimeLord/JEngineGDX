@@ -23,7 +23,8 @@ import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettin
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.Hierarchy;
-import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.InfoHierarchyComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.MutateHierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.RelativeCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
@@ -84,10 +85,10 @@ public class ApplicationController extends JEngineAdapter {
 		world.getEntity(d).getComponent(RelativeCoordinatesComponent.class).coordinates(0,-200,0);
 		world.getEntity(a).getComponent(RelativeCoordinatesComponent.class).coordinates(-300,0,0);
 
-		Hierarchy hierarchy = new Hierarchy(world);
-		hierarchy.addChild(a,b);
-		hierarchy.addChild(b,c);
-		hierarchy.addChild(b,d);
+		world.getEntity(b).getComponent(MutateHierarchyComponent.class)
+				.addChild(c)
+				.addChild(d)
+				.setParent(a);
 
 		Gdx.app.log("dependency", TestDependency.VALUE);
 	}
@@ -110,8 +111,10 @@ public class ApplicationController extends JEngineAdapter {
 
 	private void addHierarchyComponents(World world, int i){
 		EntityEdit entity = world.getEntity(i).edit();
-		entity.create(HierarchyComponent.class);
+		entity.create(InfoHierarchyComponent.class);
+		entity.create(MutateHierarchyComponent.class);
 		entity.create(RelativeCoordinatesComponent.class).coordinates(100,0,0);
+
 	}
 
 	private void spawnDroppableEntity(JEngineContainer container, int width, int height) {

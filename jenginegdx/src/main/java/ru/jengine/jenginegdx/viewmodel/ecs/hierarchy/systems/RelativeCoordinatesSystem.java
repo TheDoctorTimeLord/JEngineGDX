@@ -4,22 +4,21 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import ru.jengine.beancontainer.annotations.Bean;
-import ru.jengine.beancontainer.annotations.Order;
-import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.InfoHierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.RelativeCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 
 @Bean
-@All({RelativeCoordinatesComponent.class, CoordinatesComponent.class, HierarchyComponent.class})
+@All({RelativeCoordinatesComponent.class, CoordinatesComponent.class, InfoHierarchyComponent.class})
 public class RelativeCoordinatesSystem extends IteratingSystem {
     protected ComponentMapper<RelativeCoordinatesComponent> mRC;
     protected ComponentMapper<CoordinatesComponent> mC;
-    protected ComponentMapper<HierarchyComponent> mH;
+    protected ComponentMapper<InfoHierarchyComponent> mH;
 
     @Override
     protected void process(int i) {
         RelativeCoordinatesComponent rcp = mRC.get(i);
-        HierarchyComponent hp = mH.get(i);
+        InfoHierarchyComponent hp = mH.get(i);
         CoordinatesComponent cp = mC.get(i);
 
         if (!rcp.isDirty()) return;
@@ -27,14 +26,13 @@ public class RelativeCoordinatesSystem extends IteratingSystem {
         if (hp.ParentId == -1) {
             cp.coordinates(rcp.x(), rcp.y(), rcp.z());
             allignTree(i);
-        }
-        else {
+        } else {
             allignTree(hp.ParentId);
         }
     }
 
     void allignTree(int i) {
-        HierarchyComponent hp = mH.get(i);
+        InfoHierarchyComponent hp = mH.get(i);
         CoordinatesComponent cp = mC.get(i);
         for (int k : hp.ChildrenId) {
             CoordinatesComponent _cp = mC.get(k);
