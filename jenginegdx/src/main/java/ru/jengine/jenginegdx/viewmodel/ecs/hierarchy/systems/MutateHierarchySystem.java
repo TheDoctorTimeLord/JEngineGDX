@@ -30,7 +30,17 @@ public class MutateHierarchySystem extends IteratingSystem {
             attachChild(k, i);
         }
 
+        checkForCycle(i);
+
         mutateComponent.clear();
+    }
+
+    private void checkForCycle(int i) {
+        int t = i;
+        do {
+            t = mInfoMapper.get(t).ParentId;
+            if (t == i) throw new RuntimeException("Created cycle in Hierarchy");
+        } while (t != -1);
     }
 
     private void detachChild(int i) {
