@@ -12,14 +12,15 @@ import ru.jengine.jenginegdx.Constants.Contexts;
 import ru.jengine.jenginegdx.Constants.InputEvents;
 import ru.jengine.jenginegdx.Constants.UserEvents;
 import ru.jengine.jenginegdx.container.JEngineGdxConfiguration;
+import ru.jengine.jenginegdx.utils.DebuggingUtils;
 import ru.jengine.jenginegdx.view.texture.TextureBoundComponent;
 import ru.jengine.jenginegdx.view.texture.TextureComponent;
-import ru.jengine.jenginegdx.viewmodel.JEngineAdapter;
+import ru.jengine.jenginegdx.viewmodel.JEngine;
 import ru.jengine.jenginegdx.viewmodel.ecs.WorldHolder;
 import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.DroppedHandler;
-import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedContainerComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedContainerComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
@@ -28,8 +29,11 @@ import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
+import ru.jengine.jenginegdx.viewmodel.stateimporting.CoreNamespace;
+import ru.jengine.jenginegdx.viewmodel.stateimporting.WorldStateImporter;
+import ru.jengine.jsonconverter.resources.ResourceMetadata;
 
-public class ApplicationController extends JEngineAdapter {
+public class ApplicationController extends JEngine {
 	private Texture img;
 
 	@Override
@@ -47,16 +51,21 @@ public class ApplicationController extends JEngineAdapter {
 		int width = Gdx.graphics.getWidth();
 		int height = Gdx.graphics.getHeight();
 
-		//spawnGridEntities(container, width, height);
-		spawnSingleEntity(container,-100);
-		spawnSingleEntity(container, 100);
-		spawnDroppableEntity(container, width, height);
+		World world = container.getBean(WorldHolder.class).getWorld();
+		WorldStateImporter stateImporter = container.getBean(WorldStateImporter.class);
+
+		DebuggingUtils.time("LOADING WORLD", () ->
+				stateImporter.loadState(world, new ResourceMetadata(CoreNamespace.INTERNAL.getNamespace(), null, "ui.json")));
+
+//		spawnGridEntities(container, width, height);
+//		spawnSingleEntity(container,-100);
+//		spawnSingleEntity(container, 100);
+//		spawnDroppableEntity(container, width, height);
 
 		attachMouseListener(container, width, height);
 		attachFpsTracker(container);
 
 		EventBus eventBus = container.getBean(EventBus.class);
-		World world = container.getBean(WorldHolder.class).getWorld();
 		eventBus.registerHandler(new UserEventSinglePostHandler(world));
 
 		Gdx.app.log("dependency", TestDependency.VALUE);
@@ -85,9 +94,7 @@ public class ApplicationController extends JEngineAdapter {
 		entity.create(TextureBoundComponent.class).bound((float) width / 2, height);
 		entity.create(VisibleComponent.class);
 		entity.create(MouseTouchBoundComponent.class).bounds((float) width / 2, height);
-		entity.create(DroppedContainerComponent.class).droppedHandler("simple", new DroppedHandler(world) {
-			private ComponentMapper<TextureBoundComponent> textureBoundComponentMapper;
-			private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
+		entity.create(DroppedContainerComponent.class).droppedHandler("simple", new DroppedHandler() {
 			@Override
 			public void handle(int target, int container, float droppedX, float droppedY, float xOffsetToMouse, float yOffsetToMouse,
 							   String draggingType)
@@ -172,6 +179,14 @@ public class ApplicationController extends JEngineAdapter {
 
 			builder.append("]");
 			System.out.println(builder);
+		}
+	}
+
+	public static class SimpleDroppedHandler extends DroppedHandler {
+		@Override
+		public void handle(int target, int container, float droppedX, float droppedY, float xOffsetToMouse,
+				float yOffsetToMouse, String draggingType)
+		{
 		}
 	}
 }

@@ -1,12 +1,11 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.location;
 
+import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
 import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
-import ru.jengine.jenginegdx.viewmodel.ecs.cleaning.CanBeDirty;
 
-@CanBeDirty
-@ExternalAddable
-public class RotationComponent extends CanDirtyPooledComponent {
+@ExternalAddable("rotation")
+public class RotationComponent extends CanDirtyPooledComponent implements CanBeFilling<RotationComponent> {
     public static final float DEFAULT_ROTATION = 0;
 
     private float rotation = DEFAULT_ROTATION;
@@ -24,5 +23,11 @@ public class RotationComponent extends CanDirtyPooledComponent {
     @Override
     protected void reset() {
         rotation(DEFAULT_ROTATION);
+    }
+
+    @Override
+    public boolean fill(RotationComponent other) {
+        this.rotation = other.rotation;
+        return true;
     }
 }
