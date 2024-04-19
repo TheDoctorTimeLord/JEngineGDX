@@ -1,11 +1,12 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components;
 
 import com.artemis.PooledComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.DroppedHandler;
 
-@ExternalAddable
-public class DroppedContainerComponent extends PooledComponent {
+@ExternalAddable("droppedContainer")
+public class DroppedContainerComponent extends PooledComponent implements CanBeFilling<DroppedContainerComponent> {
     private String targetDraggingType;
     private DroppedHandler droppedHandler;
 
@@ -26,5 +27,12 @@ public class DroppedContainerComponent extends PooledComponent {
     @Override
     protected void reset() {
         droppedHandler(null, null);
+    }
+
+    @Override
+    public boolean fill(DroppedContainerComponent other) {
+        this.targetDraggingType = other.targetDraggingType;
+        this.droppedHandler = other.droppedHandler;
+        return targetDraggingType != null && droppedHandler != null;
     }
 }

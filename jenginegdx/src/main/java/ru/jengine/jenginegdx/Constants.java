@@ -1,5 +1,9 @@
 package ru.jengine.jenginegdx;
 
+import ru.jengine.jsonconverter.JsonConverterConstants;
+
+import java.util.Set;
+
 public interface Constants {
     interface Contexts {
         String JENGINE = "jenginegdx";
@@ -17,5 +21,31 @@ public interface Constants {
     interface UserEvents {
         String DRAG_AND_DROP = "dragAndDrop";
         String DROP_TO = "dropTo";
+    }
+
+    interface JsonFormatters {
+        interface Priorities {
+            int PARENT_FORMATTER = 0;
+            int LINK_FORMATTER = 128;
+            int COMPONENT_FORMATTER = 1024;
+        }
+
+        interface EntitySpecialFields {
+            String ID = "id";
+
+            Set<String> ALL = Set.of(ID);
+        }
+
+        interface InternalFields {
+            String JAVA_CLASS = JsonConverterConstants.CLASS_PATH_FIELD;
+            String PARENT = "#parent";
+            String TYPE = JsonConverterConstants.TYPE;
+
+            Set<String> ALL = Set.of(JAVA_CLASS, PARENT, TYPE);
+        }
+
+        interface JsonTypes {
+            String ENTITY = "entity";
+        }
     }
 }

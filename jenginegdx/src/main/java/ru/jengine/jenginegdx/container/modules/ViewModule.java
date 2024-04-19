@@ -9,7 +9,7 @@ import static ru.jengine.jenginegdx.Constants.Contexts.JENGINE;
 
 @ContainerModule(contextName = JENGINE)
 @PackagesScan({
-        @PackageScan("ru.jengine.jenginegdx.view."), //TODO исправить баг с чтением путей (читает как view, так и viewmodel)
+        @PackageScan("ru.jengine.jenginegdx.view.")
 })
 public class ViewModule extends AnnotationModule {
 }

@@ -36,9 +36,12 @@ then
   return 3
 fi
 
-git checkout main > /dev/null
-git pull > /dev/null
-mvn clean > /dev/null
-mvn package > /dev/null
+echo "Start updating local JEngine version"
+
+git checkout main 1> /dev/null 2> /dev/null
+git pull 1> /dev/null
+mvn clean 1> /dev/null
+mvn package 1> /dev/null
 cp -p "$(find ./ -name 'jengine-*-with-dependencies*')" "$script_path/libs/jengine.jar"
 
+echo "Successful update local JEngine version"

@@ -1,11 +1,9 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.cleaning;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
+@Inherited
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CanBeDirty { //TODO избавиться от этой аннотации
+public @interface CanBeDirty {
 }

@@ -5,5 +5,5 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
-    implementation "com.esotericsoftware.spine:spine-libgdx:3.8.55.1"
+    implementation "org.slf4j:slf4j-simple:2.0.12"
 }
