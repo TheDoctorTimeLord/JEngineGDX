@@ -25,7 +25,8 @@ import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
@@ -75,7 +76,7 @@ public class ApplicationController extends JEngine {
 		World world = container.getBean(WorldHolder.class).getWorld();
 
 		EntityEdit entity = world.createEntity().edit();
-		entity.create(CoordinatesComponent.class).coordinates(xOffset, 0, 0);
+		entity.create(AbsoluteCoordinatesComponent.class).coordinates(xOffset, 0, 0);
 		entity.create(TextureComponent.class).texture(img);
 		entity.create(VisibleComponent.class);
 		entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
@@ -89,7 +90,7 @@ public class ApplicationController extends JEngine {
 		World world = container.getBean(WorldHolder.class).getWorld();
 
 		EntityEdit entity = world.createEntity().edit();
-		entity.create(CoordinatesComponent.class).coordinates((float) -width / 2, (float) -height / 2, -100);
+		entity.create(AbsoluteCoordinatesComponent.class).coordinates((float) -width / 2, (float) -height / 2, -100);
 		entity.create(TextureComponent.class).texture(img);
 		entity.create(TextureBoundComponent.class).bound((float) width / 2, height);
 		entity.create(VisibleComponent.class);
@@ -118,7 +119,7 @@ public class ApplicationController extends JEngine {
 		for (int x = -width / 2; x < width / 2; x += 100) {
 			for (int y = -height / 2; y < height / 2; y += 100) {
 				EntityEdit entity = world.createEntity().edit();
-				entity.create(CoordinatesComponent.class).coordinates(x, y, 0);
+				entity.create(AbsoluteCoordinatesComponent.class).coordinates(x, y, 0);
 				entity.create(TextureComponent.class).texture(img);
 				entity.create(VisibleComponent.class);
 				entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
@@ -132,7 +133,7 @@ public class ApplicationController extends JEngine {
 		World world = container.getBean(WorldHolder.class).getWorld();
 
 		EntityEdit entity = world.createEntity().edit();
-		entity.create(CoordinatesComponent.class).coordinates((float) -width / 2, (float) -height / 2, 0);
+		entity.create(AbsoluteCoordinatesComponent.class).coordinates((float) -width / 2, (float) -height / 2, 0);
 		entity.create(MouseTouchBoundComponent.class).bounds(width, height);
 		entity.create(UserEventHandlingComponent.class)
 				.addHandling(InputEvents.MOUSE_TOUCH_DOWN, InputEvents.MOUSE_TOUCH_DOWN)

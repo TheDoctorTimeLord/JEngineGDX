@@ -5,12 +5,12 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 
 import java.util.Comparator;
 
 public abstract class SortedByZIteratingSystem extends BaseEntitySystem {
-    private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+    private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private Comparator<Integer> additionalComparator = (id1, id2) -> 0;
     private int[] sortedEntities;
     private boolean nonDirty = false;

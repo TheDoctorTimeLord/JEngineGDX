@@ -6,17 +6,29 @@ import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
 @ExternalAddable("coordinates")
-public class CoordinatesComponent extends CanDirtyPooledComponent implements CanBeFilling<CoordinatesComponent> {
-    private Vector3 coordinates;
+public class AbsoluteCoordinatesComponent extends CanDirtyPooledComponent implements CanBeFilling<AbsoluteCoordinatesComponent> {
+    private Vector3 coordinates = new Vector3(0,0,0);
 
-    public CoordinatesComponent coordinates(Vector3 coordinates) {
+    public AbsoluteCoordinatesComponent coordinates(Vector3 coordinates) {
         return coordinates(coordinates.x, coordinates.y, coordinates.z);
     }
 
-    public CoordinatesComponent coordinates(float x, float y, float z) {
+    public AbsoluteCoordinatesComponent coordinates(float x, float y, float z) {
         this.coordinates = new Vector3(x, y, z);
         dirty();
         return this;
+    }
+
+    public float x(){
+        return coordinates.x;
+    }
+
+    public float y(){
+        return coordinates.y;
+    }
+
+    public float z(){
+        return coordinates.z;
     }
 
     public Vector3 getCoordinates() {
@@ -29,7 +41,7 @@ public class CoordinatesComponent extends CanDirtyPooledComponent implements Can
     }
 
     @Override
-    public boolean fill(CoordinatesComponent other) {
+    public boolean fill(AbsoluteCoordinatesComponent other) {
         this.coordinates = other.coordinates;
         return coordinates != null;
     }
