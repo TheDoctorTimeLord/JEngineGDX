@@ -22,16 +22,16 @@ public class MutateHierarchySystem extends IteratingSystem {
 
         for (MutateHierarchyRequest request : mutateComponent.requestQueue) {
             switch (request.type()) {
-                case AddChild -> {
+                case addChild -> {
                     detachFromParent(request.value());
                     attachChild(request.value(), entity);
                 }
-                case RemoveChild -> detachFromParent(request.value());
-                case SetParent -> {
+                case removeChild -> detachFromParent(request.value());
+                case setParent -> {
                     detachFromParent(request.value());
                     attachChild(entity, request.value());
                 }
-                case DetachFromParent -> detachFromParent(entity);
+                case detachFromParent -> detachFromParent(entity);
             }
         }
         checkForCycle(entity);
@@ -39,27 +39,27 @@ public class MutateHierarchySystem extends IteratingSystem {
         world.edit(entity).remove(mutateComponent);
     }
 
-    private void checkForCycle(int entity) {
+    void checkForCycle(int entity) {
         int t = entity;
         do {
-            t = hierarchyMapper.get(t).ParentId;
+            t = hierarchyMapper.get(t).parentId;
             if (t == entity) throw new RuntimeException("Created cycle in Hierarchy");
         } while (t != -1);
     }
 
-    private void detachFromParent(int entity) {
+    void detachFromParent(int entity) {
         HierarchyComponent childHierarchy = hierarchyMapper.get(entity);
-        if (childHierarchy.ParentId == -1)
+        if (childHierarchy.parentId == -1)
             return;
-        HierarchyComponent parentHierarchy = hierarchyMapper.get(childHierarchy.ParentId);
-        parentHierarchy.ChildrenId.remove((Integer) entity);
-        childHierarchy.ParentId = -1;
+        HierarchyComponent parentHierarchy = hierarchyMapper.get(childHierarchy.parentId);
+        parentHierarchy.childrenId.removeValue(entity);
+        childHierarchy.parentId = -1;
     }
 
-    private void attachChild(int child, int parent) {
+    void attachChild(int child, int parent) {
         HierarchyComponent childHierarchy = hierarchyMapper.get(child);
         HierarchyComponent parentHierarchy = hierarchyMapper.get(parent);
-        parentHierarchy.ChildrenId.add(child);
-        childHierarchy.ParentId = parent;
+        parentHierarchy.childrenId.add(child);
+        childHierarchy.parentId = parent;
     }
 }

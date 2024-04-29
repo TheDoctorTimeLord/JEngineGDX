@@ -8,28 +8,28 @@ public class MutateHierarchyComponent extends PooledComponent {
 
     public MutateHierarchyComponent setParent(int newParent) {
         requestQueue.addLast
-                (new MutateHierarchyRequest(MutateHierarchyRequestType.SetParent, newParent));
+                (new MutateHierarchyRequest(MutateHierarchyRequestType.setParent, newParent));
         return this;
     }
 
     public MutateHierarchyComponent addChild(int... newChildren) {
         for (int child : newChildren) {
             requestQueue.addLast
-                    (new MutateHierarchyRequest(MutateHierarchyRequestType.AddChild, child));
+                    (new MutateHierarchyRequest(MutateHierarchyRequestType.addChild, child));
         }
         return this;
     }
 
     public MutateHierarchyComponent detachFromParent(){
         requestQueue.addLast
-                (new MutateHierarchyRequest(MutateHierarchyRequestType.DetachFromParent, -1));
+                (new MutateHierarchyRequest(MutateHierarchyRequestType.detachFromParent, -1));
         return this;
     }
 
     public MutateHierarchyComponent removeChild(int... children) {
         for (int child : children) {
             requestQueue.addLast
-                    (new MutateHierarchyRequest(MutateHierarchyRequestType.RemoveChild, child));
+                    (new MutateHierarchyRequest(MutateHierarchyRequestType.removeChild, child));
         }
         return this;
     }

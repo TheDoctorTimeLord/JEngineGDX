@@ -4,6 +4,6 @@ import com.artemis.Component;
 import com.artemis.utils.IntBag;
 
 public class HierarchyComponent extends Component {
-    public int ParentId = -1;
-    public IntBag ChildrenId = new IntBag();
+    public int parentId = -1;
+    public IntBag childrenId = new IntBag();
 }

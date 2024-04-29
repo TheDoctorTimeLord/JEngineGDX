@@ -21,7 +21,8 @@ public class CoordinatesSystem extends IteratingSystem {
 
         if (!coordinates.isDirty()) return;
         int dirty = findHighestDirtyParent(entity);
-        int dirtyParent = hierarchyMapper.get(dirty).ParentId;
+        if (dirty != entity) return;
+        int dirtyParent = hierarchyMapper.get(dirty).parentId;
 
         if (dirtyParent == -1) {
             AbsoluteCoordinatesComponent absoluteCoordinates = absoluteCoordinatesMapper.create(dirty);
@@ -36,8 +37,8 @@ public class CoordinatesSystem extends IteratingSystem {
         coordinatesMapper.get(root).clear();
         HierarchyComponent hierarchy = hierarchyMapper.get(root);
         AbsoluteCoordinatesComponent absoluteCoordinates = absoluteCoordinatesMapper.create(root);
-        for (int i = 0; i < hierarchy.ChildrenId.size(); i++) {
-            int child = hierarchy.ChildrenId.get(i);
+        for (int i = 0; i < hierarchy.childrenId.size(); i++) {
+            int child = hierarchy.childrenId.get(i);
             AbsoluteCoordinatesComponent childAbsoluteCoordinates = absoluteCoordinatesMapper.create(child);
             CoordinatesComponent childCoordinates = coordinatesMapper.get(child);
             childAbsoluteCoordinates.coordinates(absoluteCoordinates.x() + childCoordinates.x(), absoluteCoordinates.y() + childCoordinates.y(), absoluteCoordinates.z() + childCoordinates.z());
@@ -48,7 +49,7 @@ public class CoordinatesSystem extends IteratingSystem {
 
     int findHighestDirtyParent(int entity){
         int dirty = entity;
-        while ( (entity = hierarchyMapper.get(entity).ParentId) != -1){
+        while ( (entity = hierarchyMapper.get(entity).parentId) != -1){
             if (coordinatesMapper.get(entity).isDirty()) dirty = entity;
         }
         return dirty;
