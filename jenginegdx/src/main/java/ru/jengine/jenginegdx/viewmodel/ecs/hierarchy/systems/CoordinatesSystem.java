@@ -9,7 +9,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesCompo
 import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
 
 @Bean
-@All({CoordinatesComponent.class, AbsoluteCoordinatesComponent.class, HierarchyComponent.class})
+@All({CoordinatesComponent.class, HierarchyComponent.class})
 public class CoordinatesSystem extends IteratingSystem {
     protected ComponentMapper<CoordinatesComponent> coordinatesMapper;
     protected ComponentMapper<AbsoluteCoordinatesComponent> absoluteCoordinatesMapper;
@@ -24,8 +24,8 @@ public class CoordinatesSystem extends IteratingSystem {
         int dirtyParent = hierarchyMapper.get(dirty).ParentId;
 
         if (dirtyParent == -1) {
-            absoluteCoordinatesMapper.get(dirty)
-                    .coordinates(coordinates.x(), coordinates.y(), coordinates.z());
+            AbsoluteCoordinatesComponent absoluteCoordinates = absoluteCoordinatesMapper.create(dirty);
+            absoluteCoordinates.coordinates(coordinates.x(), coordinates.y(), coordinates.z());
             alignTree(dirty);
         } else {
             alignTree(dirtyParent);
@@ -35,12 +35,14 @@ public class CoordinatesSystem extends IteratingSystem {
     void alignTree(int root) {
         coordinatesMapper.get(root).clear();
         HierarchyComponent hierarchy = hierarchyMapper.get(root);
-        AbsoluteCoordinatesComponent absoluteCoordinates = absoluteCoordinatesMapper.get(root);
-        for (int child : hierarchy.ChildrenId) {
-            AbsoluteCoordinatesComponent childAbsoluteCoordinates = absoluteCoordinatesMapper.get(child);
+        AbsoluteCoordinatesComponent absoluteCoordinates = absoluteCoordinatesMapper.create(root);
+        for (int i = 0; i < hierarchy.ChildrenId.size(); i++) {
+            int child = hierarchy.ChildrenId.get(i);
+            AbsoluteCoordinatesComponent childAbsoluteCoordinates = absoluteCoordinatesMapper.create(child);
             CoordinatesComponent childCoordinates = coordinatesMapper.get(child);
             childAbsoluteCoordinates.coordinates(absoluteCoordinates.x() + childCoordinates.x(), absoluteCoordinates.y() + childCoordinates.y(), absoluteCoordinates.z() + childCoordinates.z());
             alignTree(child);
+
         }
     }
 

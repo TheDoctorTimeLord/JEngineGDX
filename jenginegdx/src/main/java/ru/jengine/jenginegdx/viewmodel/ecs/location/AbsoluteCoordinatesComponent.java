@@ -7,7 +7,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
 @ExternalAddable("coordinates")
 public class AbsoluteCoordinatesComponent extends CanDirtyPooledComponent implements CanBeFilling<AbsoluteCoordinatesComponent> {
-    private Vector3 coordinates;
+    private Vector3 coordinates = new Vector3(0,0,0);
 
     public AbsoluteCoordinatesComponent coordinates(Vector3 coordinates) {
         return coordinates(coordinates.x, coordinates.y, coordinates.z);
