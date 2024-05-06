@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Shared;
+import ru.jengine.jenginegdx.utils.JsonUtils;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
 import ru.jengine.jsonconverter.serializeprocess.JsonConverterDeserializer;
 
@@ -25,8 +26,8 @@ public class UserEventHandlingComponentDeserializer implements JsonConverterDese
         UserEventHandlingComponent userEventHandling = new UserEventHandlingComponent();
         for (Entry<String, JsonElement> entry : object.entrySet()) {
             JsonElement mapping = entry.getValue();
-            if (!mapping.isJsonPrimitive() && !mapping.getAsJsonPrimitive().isString()) {
-                throw new JsonParseException("JSON of user events must contain mappings with format ['from event' : 'to event] but actual [%s]".formatted(json));
+            if (!JsonUtils.isString(mapping)) {
+                throw new JsonParseException("JSON of user events must contain mappings with format ['from event' : 'to event'] but actual [%s]".formatted(json));
             }
             userEventHandling.addHandling(entry.getKey(), mapping.getAsString());
         }

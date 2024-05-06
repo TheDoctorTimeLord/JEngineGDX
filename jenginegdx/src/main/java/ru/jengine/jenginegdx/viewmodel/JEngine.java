@@ -6,7 +6,7 @@ import ru.jengine.beancontainer.JEngineContainer;
 import ru.jengine.beancontainer.configuration.ContainerConfiguration;
 import ru.jengine.beancontainer.configuration.DefaultContainerConfigurationBuilder;
 import ru.jengine.jenginegdx.container.modules.MainGameModule;
-import ru.jengine.jenginegdx.viewmodel.ecs.WorldHolder;
+import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 
 public abstract class JEngine extends ApplicationAdapter {
     private JEngineContainer container;

@@ -32,8 +32,9 @@ public interface Constants {
 
         interface EntitySpecialFields {
             String ID = "id";
+            String CHILDREN = "children";
 
-            Set<String> ALL = Set.of(ID);
+            Set<String> ALL = Set.of(ID, CHILDREN);
         }
 
         interface InternalFields {
@@ -47,5 +48,7 @@ public interface Constants {
         interface JsonTypes {
             String ENTITY = "entity";
         }
+
+        String EMPTY_LINK = "none";
     }
 }

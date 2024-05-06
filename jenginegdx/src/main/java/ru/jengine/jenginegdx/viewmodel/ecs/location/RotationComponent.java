@@ -1,7 +1,7 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.location;
 
 import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
-import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.utils.CanDirtyPooledComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
 @ExternalAddable("rotation")

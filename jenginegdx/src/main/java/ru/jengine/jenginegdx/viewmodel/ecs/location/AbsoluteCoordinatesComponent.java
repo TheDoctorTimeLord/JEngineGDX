@@ -2,10 +2,10 @@ package ru.jengine.jenginegdx.viewmodel.ecs.location;
 
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
-import ru.jengine.jenginegdx.viewmodel.ecs.CanDirtyPooledComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.utils.CanDirtyPooledComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
-@ExternalAddable("coordinates")
+@ExternalAddable("abs_coordinates")
 public class AbsoluteCoordinatesComponent extends CanDirtyPooledComponent implements CanBeFilling<AbsoluteCoordinatesComponent> {
     private Vector3 coordinates = new Vector3(0,0,0);
 

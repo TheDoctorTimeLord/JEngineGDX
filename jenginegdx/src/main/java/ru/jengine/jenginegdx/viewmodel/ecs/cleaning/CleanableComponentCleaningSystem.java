@@ -7,7 +7,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.ClassesWith;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
-import ru.jengine.jenginegdx.viewmodel.ecs.MarkerComponentsSystem;
+import ru.jengine.jenginegdx.viewmodel.ecs.utils.MarkerComponentsSystem;
 
 import java.util.List;
 

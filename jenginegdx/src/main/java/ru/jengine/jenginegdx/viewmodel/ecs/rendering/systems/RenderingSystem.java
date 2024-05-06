@@ -8,7 +8,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PostConstruct;
 import ru.jengine.jenginegdx.container.JEngineGdxConfiguration;
-import ru.jengine.jenginegdx.viewmodel.ecs.SortedByZIteratingSystem;
+import ru.jengine.jenginegdx.viewmodel.ecs.utils.SortedByZIteratingSystem;
 import ru.jengine.jenginegdx.viewmodel.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;

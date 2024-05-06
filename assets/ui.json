@@ -6,8 +6,8 @@
       "height": 256
     }
   },
-  "supertypes": {
-    "single": {
+  "superclasses": {
+    "simpleDraggable": {
       "coordinates": {"x": 0, "y": 0, "z": 0},
       "texture": {"texture": "int:ui.json$images.badlogic.texture"},
       "visible": {},
@@ -22,17 +22,31 @@
       }
     }
   },
+
+  "prototypes": {
+    "simpleDraggable": {
+      "#parent": "int:ui.json$superclasses.simpleDraggable",
+      "#type": "entity"
+    }
+  },
   "entities": [
     {
-      "#parent": "int:ui.json$supertypes.single",
+      "#parent": "int:ui.json$superclasses.simpleDraggable",
       "#type": "entity",
       "id": "first"
     },
     {
-      "#parent": "int:ui.json$supertypes.single",
+      "#parent": "int:ui.json$superclasses.simpleDraggable",
       "#type": "entity",
       "id": "second",
-      "coordinates": {"x": 100, "y": 0, "z": 0}
+      "coordinates": {"x": 100, "y": 0, "z": 0},
+      "children": [
+        {
+          "#parent": "int:ui.json$superclasses.simpleDraggable",
+          "#type": "entity",
+          "coordinates": {"x": 100, "y": 40, "z": 0}
+        }
+      ]
     },
     {
       "#type": "entity",
@@ -40,14 +54,8 @@
       "coordinates": {"x": -320, "y": -240, "z": -10},
       "texture": {"texture": "int:ui.json$images.badlogic.texture"},
       "visible": {},
-      "mouseTouchBound": {
-        "width": 320,
-        "height": 480
-      },
-      "textureBound": {
-        "width": 320,
-        "height": 480
-      },
+      "mouseTouchBound": {"width": 320, "height": 480},
+      "textureBound": {"width": 320, "height": 480},
       "droppedContainer": {
         "targetDraggingType": "simple",
         "droppedHandler": "ru.jengine.jenginegdx.ApplicationController$SimpleDroppedHandler"

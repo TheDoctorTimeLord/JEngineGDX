@@ -4,17 +4,18 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.One;
 import com.artemis.systems.IteratingSystem;
 import ru.jengine.beancontainer.annotations.Bean;
+import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.MutateHierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.MutateHierarchyRequest;
 
 
 @Bean
+@Order(4)
 @One(MutateHierarchyComponent.class)
 public class MutateHierarchySystem extends IteratingSystem {
-
-    protected ComponentMapper<HierarchyComponent> hierarchyMapper;
-    protected ComponentMapper<MutateHierarchyComponent> mutateHierarchyMapper;
+    private ComponentMapper<HierarchyComponent> hierarchyMapper;
+    private ComponentMapper<MutateHierarchyComponent> mutateHierarchyMapper;
 
     @Override
     protected void process(int entity) {
@@ -39,7 +40,7 @@ public class MutateHierarchySystem extends IteratingSystem {
         world.edit(entity).remove(mutateComponent);
     }
 
-    void checkForCycle(int entity) {
+    private void checkForCycle(int entity) {
         int t = entity;
         do {
             t = hierarchyMapper.get(t).parentId;
@@ -47,7 +48,7 @@ public class MutateHierarchySystem extends IteratingSystem {
         } while (t != -1);
     }
 
-    void detachFromParent(int entity) {
+    private void detachFromParent(int entity) {
         HierarchyComponent childHierarchy = hierarchyMapper.get(entity);
         if (childHierarchy.parentId == -1)
             return;
@@ -56,7 +57,7 @@ public class MutateHierarchySystem extends IteratingSystem {
         childHierarchy.parentId = -1;
     }
 
-    void attachChild(int child, int parent) {
+    private void attachChild(int child, int parent) {
         HierarchyComponent childHierarchy = hierarchyMapper.get(child);
         HierarchyComponent parentHierarchy = hierarchyMapper.get(parent);
         parentHierarchy.childrenId.add(child);
