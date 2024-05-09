@@ -7,6 +7,7 @@ import ru.jengine.jenginegdx.Constants.JsonFormatters.InternalFields;
 import ru.jengine.jenginegdx.Constants.JsonFormatters.Priorities;
 import ru.jengine.jsonconverter.formatting.FormatterContext;
 import ru.jengine.jsonconverter.formatting.JsonFormatter;
+import ru.jengine.jsonconverter.standardtools.OverridingObjectManager;
 
 import java.util.Set;
 
@@ -14,6 +15,11 @@ import java.util.Set;
 @Shared
 public class ParentJsonFormatter implements JsonFormatter<FormatterContext> {
     private static final Set<String> REQUIRED_FIELDS = Set.of(InternalFields.PARENT);
+    private final OverridingObjectManager overridingObjectManager;
+
+    public ParentJsonFormatter(OverridingObjectManager overridingObjectManager) {
+        this.overridingObjectManager = overridingObjectManager;
+    }
 
     @Override
     public Set<String> getRequiredFields() {
@@ -27,7 +33,8 @@ public class ParentJsonFormatter implements JsonFormatter<FormatterContext> {
 
     @Override
     public boolean formatJson(JsonObject json, FormatterContext context) {
-        context.parent(json, InternalFields.PARENT);
+        JsonObject parent = context.parent(json, InternalFields.PARENT);
+        overridingObjectManager.override(json, parent);
         return true;
     }
 }

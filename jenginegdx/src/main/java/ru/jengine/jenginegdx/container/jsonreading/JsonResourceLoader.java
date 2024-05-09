@@ -2,7 +2,6 @@ package ru.jengine.jenginegdx.container.jsonreading;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.CoreNamespace;
 import ru.jengine.jsonconverter.exceptions.ResourceLoadingException;
 import ru.jengine.jsonconverter.resources.ResourceLoaderWithCache;
@@ -14,7 +13,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Bean
 public class JsonResourceLoader extends ResourceLoaderWithCache {
     @Override
     protected String getResourceInt(ResourceMetadata metadata) throws ResourceLoadingException {
