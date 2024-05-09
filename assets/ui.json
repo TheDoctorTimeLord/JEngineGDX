@@ -59,9 +59,6 @@
       "droppedContainer": {
         "targetDraggingType": "simple",
         "droppedHandler": "ru.jengine.jenginegdx.ApplicationController$SimpleDroppedHandler"
-      },
-      "userEventHandling": {
-        "mouse_DraggedTo": "dropTo"
       }
     }
   ]

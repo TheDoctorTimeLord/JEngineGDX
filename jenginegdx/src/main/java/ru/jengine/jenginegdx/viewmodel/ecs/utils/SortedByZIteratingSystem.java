@@ -5,7 +5,7 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 
 import java.util.Comparator;
 

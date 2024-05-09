@@ -20,6 +20,9 @@ public class GlobalDraggingTrackingSystem extends IteratingSystem {
     private ComponentMapper<MouseEventComponent> mouseEventComponentMapper;
     private ComponentMapper<DraggingTrackingComponent> draggingTrackingComponentMapper;
     private int draggingTracker;
+    private float lastX = 0;
+    private float lastY = 0;
+    private boolean receivedEvent = false;
 
     @Override
     protected void setWorld(World world) {
@@ -29,25 +32,33 @@ public class GlobalDraggingTrackingSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
+        receivedEvent = true;
         MouseEventComponent mouse = mouseEventComponentMapper.get(entityId);
         if (MouseEventType.DRAGGING.equals(mouse.getEventType())) {
             DraggingTrackingComponent draggingCoordinate = draggingTrackingComponentMapper.has(draggingTracker)
                     ? draggingTrackingComponentMapper.get(draggingTracker)
                     : draggingTrackingComponentMapper.create(draggingTracker);
-            draggingCoordinate.draggingPosition(mouse.getMouseX(), mouse.getMouseY());
+            draggingCoordinate.draggingOffset(mouse.getMouseX() - lastX, mouse.getMouseY() - lastY);
         }
-        else {
+        lastX = mouse.getMouseX();
+        lastY = mouse.getMouseY();
+    }
+
+    @Override
+    protected void end() {
+        if (!receivedEvent && draggingTrackingComponentMapper.has(draggingTracker)) {
             draggingTrackingComponentMapper.remove(draggingTracker);
         }
+        receivedEvent = false;
     }
 
     @Nullable
-    public Vector2 getDraggingCoordinates() {
+    public Vector2 getDraggingOffset() {
         if (!draggingTrackingComponentMapper.has(draggingTracker)) {
             return null;
         }
 
         DraggingTrackingComponent mouse = draggingTrackingComponentMapper.get(draggingTracker);
-        return new Vector2(mouse.getDraggingX(), mouse.getDraggingY());
+        return new Vector2(mouse.getOffsetX(), mouse.getOffsetY());
     }
 }

@@ -3,24 +3,24 @@ package ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components;
 import com.artemis.PooledComponent;
 
 public class DraggingTrackingComponent extends PooledComponent {
-    private float draggingX;
-    private float draggingY;
+    private float offsetX;
+    private float offsetY;
 
-    public void draggingPosition(float draggingX, float draggingY) {
-        this.draggingX = draggingX;
-        this.draggingY = draggingY;
+    public void draggingOffset(float draggingX, float draggingY) {
+        this.offsetX = draggingX;
+        this.offsetY = draggingY;
     }
 
-    public float getDraggingX() {
-        return draggingX;
+    public float getOffsetX() {
+        return offsetX;
     }
 
-    public float getDraggingY() {
-        return draggingY;
+    public float getOffsetY() {
+        return offsetY;
     }
 
     @Override
     protected void reset() {
-        draggingPosition(0, 0);
+        draggingOffset(0, 0);
     }
 }

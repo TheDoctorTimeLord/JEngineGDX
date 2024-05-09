@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import ru.jengine.beancontainer.annotations.Bean;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 
 @Bean

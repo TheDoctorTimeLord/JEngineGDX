@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.systems;
+package ru.jengine.jenginegdx.viewmodel.ecs.location.systems;
 
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
@@ -7,12 +7,12 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 
 @Bean
-@Order(5)
+@Order(6)
 @All({CoordinatesComponent.class})
-public class CoordinatesSystem extends IteratingSystem {
+public class AbsoluteCoordinatesSystem extends IteratingSystem {
     private ComponentMapper<CoordinatesComponent> coordinatesMapper;
     private ComponentMapper<AbsoluteCoordinatesComponent> absoluteCoordinatesMapper;
     private ComponentMapper<HierarchyComponent> hierarchyMapper;

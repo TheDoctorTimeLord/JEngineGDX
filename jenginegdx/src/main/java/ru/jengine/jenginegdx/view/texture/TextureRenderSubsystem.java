@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.annotations.Bean;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.AbsoluteCoordinatesComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.location.RotationComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.location.components.RotationComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 
 @Bean

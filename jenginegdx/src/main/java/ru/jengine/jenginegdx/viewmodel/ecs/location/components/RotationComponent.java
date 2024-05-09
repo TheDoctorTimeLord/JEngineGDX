@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.location;
+package ru.jengine.jenginegdx.viewmodel.ecs.location.components;
 
 import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
 import ru.jengine.jenginegdx.viewmodel.ecs.utils.CanDirtyPooledComponent;

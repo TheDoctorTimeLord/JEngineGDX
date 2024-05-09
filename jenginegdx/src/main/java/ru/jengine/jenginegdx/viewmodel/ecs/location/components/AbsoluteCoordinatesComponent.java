@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.location;
+package ru.jengine.jenginegdx.viewmodel.ecs.location.components;
 
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
