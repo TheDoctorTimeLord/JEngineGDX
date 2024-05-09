@@ -2,7 +2,7 @@ package ru.jengine.jenginegdx.viewmodel.ecs.utils;
 
 import com.artemis.*;
 import com.artemis.utils.IntBag;
-import ru.jengine.beancontainer.utils.AnnotationUtils;
+import ru.jengine.utils.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

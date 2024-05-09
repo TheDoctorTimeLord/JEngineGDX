@@ -46,6 +46,8 @@ public class WorldStateImporter { //TODO кандидат на рефактор�
         } catch (JEngineGdxException e) {
             throw new JsonParseException("Error when loading entities by path [%s]".formatted(worldStatePath), e);
         }
+
+        worldHolder.validateEntitiesStates();
     }
 
     private static void fillPrototypeLinkingInfo(

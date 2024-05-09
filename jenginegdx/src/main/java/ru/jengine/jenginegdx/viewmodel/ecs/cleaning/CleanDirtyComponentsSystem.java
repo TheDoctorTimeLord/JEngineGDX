@@ -16,7 +16,8 @@ import java.util.List;
 @Order(0)
 public class CleanDirtyComponentsSystem extends MarkerComponentsSystem {
     public CleanDirtyComponentsSystem(@ClassesWith(CanBeDirty.class) List<Class<?>> inputComponents) {
-        super(CanBeDirty.class, inputComponents);
+        super(CanBeDirty.class, inputComponents.stream().filter(cls -> !CanDirtyPooledComponent.class.equals(cls)).toList());
+        //TODO сделать по наследованию
     }
 
     @Override

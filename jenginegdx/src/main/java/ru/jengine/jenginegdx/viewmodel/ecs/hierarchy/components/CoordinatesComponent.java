@@ -2,8 +2,8 @@ package ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components;
 
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
-import ru.jengine.jenginegdx.viewmodel.ecs.utils.CanDirtyPooledComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
+import ru.jengine.jenginegdx.viewmodel.ecs.utils.CanDirtyPooledComponent;
 
 @ExternalAddable("coordinates")
 public class CoordinatesComponent extends CanDirtyPooledComponent implements CanBeFilling<CoordinatesComponent> {

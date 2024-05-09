@@ -37,7 +37,6 @@ public class TextureRenderSubsystem extends RenderSubsystem {
                 ? rotationComponentMapper.get(entityId).getRotation()
                 : RotationComponent.DEFAULT_ROTATION;
 
-        //TODO разобраться с origin
         batch.draw(region, coordinates.x, coordinates.y, coordinates.x, coordinates.y, width, height, 1, 1, rotation);
     }
 }

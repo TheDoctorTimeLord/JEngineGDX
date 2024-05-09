@@ -6,11 +6,11 @@ import com.artemis.utils.IntBag;
 import com.google.gson.*;
 import org.reflections.ReflectionUtils;
 import ru.jengine.beancontainer.exceptions.ContainerException;
-import ru.jengine.beancontainer.utils.AnnotationUtils;
 import ru.jengine.jenginegdx.utils.JsonUtils;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.EntityLink;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.linking.LinkField.MultiLink;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.linking.LinkField.SingleLink;
+import ru.jengine.utils.AnnotationUtils;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;

@@ -5,6 +5,8 @@ import com.artemis.annotations.EntityId;
 import com.artemis.utils.IntBag;
 
 public class HierarchyComponent extends Component {
-    @EntityId public int parentId = -1;
+    public static final int NONE_LINK = -1;
+
+    @EntityId public int parentId = NONE_LINK;
     @EntityId public IntBag childrenId = new IntBag();
 }

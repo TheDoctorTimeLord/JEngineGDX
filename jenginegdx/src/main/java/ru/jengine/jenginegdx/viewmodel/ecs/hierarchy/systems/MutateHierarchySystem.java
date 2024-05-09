@@ -5,6 +5,7 @@ import com.artemis.annotations.One;
 import com.artemis.systems.IteratingSystem;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
+import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.MutateHierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.MutateHierarchyRequest;
@@ -41,11 +42,13 @@ public class MutateHierarchySystem extends IteratingSystem {
     }
 
     private void checkForCycle(int entity) {
-        int t = entity;
+        int currentEntityId = entity;
         do {
-            t = hierarchyMapper.get(t).parentId;
-            if (t == entity) throw new RuntimeException("Created cycle in Hierarchy");
-        } while (t != -1);
+            currentEntityId = hierarchyMapper.get(currentEntityId).parentId;
+            if (currentEntityId == entity) {
+                throw new JEngineGdxException("Created cycle in Hierarchy with entity [%s]".formatted(entity));
+            }
+        } while (currentEntityId != -1);
     }
 
     private void detachFromParent(int entity) {

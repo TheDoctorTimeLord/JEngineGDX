@@ -11,6 +11,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.PreDestroy;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
+import ru.jengine.jenginegdx.viewmodel.ecs.validations.onstartvalidators.WorldValidationManager;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.EntityToWorldLoader;
 
 import java.util.HashMap;
@@ -22,11 +23,15 @@ import java.util.Set;
 public class WorldHolder {
     private final World world;
     private final EntityToWorldLoader entityToWorldLoader;
+    private final WorldValidationManager worldValidationManager;
+    private final BatchUpdatableInvocationStrategy updatableInvocationStrategy;
     private final Map<String, EntityPrototype> prototypes = new HashMap<>();
 
     @Api(@ApiElement(index = 0, message = "Add bean extends 'WorldSystemsHolder' with ECS systems list."))
-    public WorldHolder(WorldSystemsHolder ecsSystems, EntityToWorldLoader entityToWorldLoader) {
+    public WorldHolder(WorldSystemsHolder ecsSystems, EntityToWorldLoader entityToWorldLoader,
+            WorldValidationManager worldValidationManager) {
         this.entityToWorldLoader = entityToWorldLoader;
+        this.worldValidationManager = worldValidationManager;
 
         WorldConfiguration config = new WorldConfiguration();
         config.setSystem(new EntityLinkManager());
@@ -35,6 +40,7 @@ public class WorldHolder {
             config.setSystem(ecsSystem);
         }
         config.setAlwaysDelayComponentRemoval(true);
+        config.setInvocationStrategy(updatableInvocationStrategy = new BatchUpdatableInvocationStrategy());
 
         this.world = new World(config);
     }
@@ -57,6 +63,11 @@ public class WorldHolder {
         }
 
         entityToWorldLoader.loadEntities(world, prototype.linkingContext(), List.of(prototype.prototypeDefinition()));
+    }
+
+    public void validateEntitiesStates() {
+        updatableInvocationStrategy.updateBatch();
+        worldValidationManager.validate(this);
     }
 
     public World getWorld() {
