@@ -1,47 +1,26 @@
-package ru.jengine.jenginegdx.view.text;
+package ru.jengine.jenginegdx.viewmodel.ecs.text.components;
 
 import com.artemis.PooledComponent;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
 import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
+import ru.jengine.jenginegdx.viewmodel.ecs.CanBeFilling;
 import ru.jengine.jenginegdx.viewmodel.ecs.ExternalAddable;
 
-@ExternalAddable("text")
-public class TextComponent extends PooledComponent implements CanBeFilling<TextComponent> {
-    private BitmapFont font;
-    private String text;
+@ExternalAddable("textPosition")
+public class TextPositionComponent extends PooledComponent implements CanBeFilling<TextPositionComponent> {
     private float width;
     private float xOffsetToText;
     private float yOffsetToText;
 
-    public TextComponent font(BitmapFont font) {
-        this.font = font;
-        return this;
-    }
-
-    public TextComponent text(String text) {
-        this.text = text;
-        return this;
-    }
-
-    public TextComponent width(float width) {
+    public TextPositionComponent width(float width) {
         if (width < 0) throw new JEngineGdxException("Text width can not be less then 0. Was set: " + width);
         this.width = width;
         return this;
     }
 
-    public TextComponent textPosition(float xOffset, float yOffset) {
+    public TextPositionComponent textPosition(float xOffset, float yOffset) {
         this.xOffsetToText = xOffset;
         this.yOffsetToText = yOffset;
         return this;
-    }
-
-    public BitmapFont getFont() {
-        return font;
-    }
-
-    public String getText() {
-        return text;
     }
 
     public float getWidth() {
@@ -58,19 +37,15 @@ public class TextComponent extends PooledComponent implements CanBeFilling<TextC
 
     @Override
     protected void reset() {
-        this.font = null;
-        this.text = null;
         this.width = 0;
         textPosition(0, 0);
     }
 
     @Override
-    public boolean fill(TextComponent other) {
-        this.font = other.font;
-        this.text = other.text;
+    public boolean fill(TextPositionComponent other) {
         this.width = other.width;
         this.xOffsetToText = other.xOffsetToText;
         this.yOffsetToText = other.yOffsetToText;
-        return font != null && text != null && width > 0;
+        return width > 0;
     }
 }

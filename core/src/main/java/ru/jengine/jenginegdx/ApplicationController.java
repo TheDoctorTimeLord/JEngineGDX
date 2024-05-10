@@ -59,8 +59,10 @@ public class ApplicationController extends JEngine {
 		WorldHolder worldHolder = container.getBean(WorldHolder.class);
 		WorldStateImporter stateImporter = container.getBean(WorldStateImporter.class);
 
-		DebuggingUtils.time("LOADING WORLD", () ->
-				stateImporter.loadState(worldHolder, new ResourceMetadata(CoreNamespace.INTERNAL.getNamespace(), null, "ui.json")));
+		DebuggingUtils.time("LOADING WORLD", () -> {
+			ResourceMetadata path = new ResourceMetadata(CoreNamespace.INTERNAL.getNamespace(), null, "ui.json");
+			stateImporter.loadState(worldHolder, path, false);
+		});
 
 //		spawnGridEntities(container, width, height);
 //		spawnSingleEntity(container,-100);

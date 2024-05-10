@@ -23,6 +23,7 @@ public abstract class JEngine extends ApplicationAdapter {
         createGameWithContainer(container);
 
         worldHolder = container.getBean(WorldHolder.class);
+        worldHolder.validateEntitiesStates();
     }
 
     protected abstract void configureContainer(DefaultContainerConfigurationBuilder configurationBuilder);

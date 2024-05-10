@@ -8,30 +8,37 @@ import com.badlogic.gdx.utils.Align;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
+import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextPositionComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextStyleComponent;
 
 @Bean
 public class TextRenderSubsystem extends RenderSubsystem {
     private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<TextComponent> textComponentMapper;
+    private ComponentMapper<TextPositionComponent> textPositionComponentMapper;
+    private ComponentMapper<TextStyleComponent> textStyleComponentMapper;
 
     @Override
     public void render(int entityId, Batch batch) {
-        if (!coordinatesComponentMapper.has(entityId) || !textComponentMapper.has(entityId)) {
+        if (!coordinatesComponentMapper.has(entityId) || !textPositionComponentMapper.has(entityId)
+                || !textComponentMapper.has(entityId) || !textStyleComponentMapper.has(entityId))
+        {
             return;
         }
 
-        TextComponent textComponent = textComponentMapper.get(entityId);
+        String text = textComponentMapper.get(entityId).getText();
+        BitmapFont font = textStyleComponentMapper.get(entityId).getFont();
+        TextPositionComponent textPosition = textPositionComponentMapper.get(entityId);
 
-        BitmapFont font = textComponent.getFont();
-        String text = textComponent.getText();
         if (font == null || text == null) {
             return;
         }
 
         Vector3 coordinates = coordinatesComponentMapper.get(entityId).getCoordinates();
-        float x = coordinates.x + textComponent.getXOffsetToText();
-        float y = coordinates.y + textComponent.getYOffsetToText();
+        float x = coordinates.x + textPosition.getXOffsetToText();
+        float y = coordinates.y + textPosition.getYOffsetToText();
 
-        font.draw(batch, text, x, y, textComponent.getWidth(), Align.center, true);
+        font.draw(batch, text, x, y, textPosition.getWidth(), Align.center, true);
     }
 }

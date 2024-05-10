@@ -26,7 +26,7 @@ public class WorldStateImporter { //TODO кандидат на рефактор�
         this.entityToWorldLoader = entityToWorldLoader;
     }
 
-    public void loadState(WorldHolder worldHolder, ResourceMetadata worldStatePath) {
+    public void loadState(WorldHolder worldHolder, ResourceMetadata worldStatePath, boolean needValidate) {
         EntitiesContainer container = entityDtoLoader.loadEntities(worldStatePath);
         EntityLinkingInfo linkingContext = container.getEntityLinkingInfo();
 
@@ -47,7 +47,9 @@ public class WorldStateImporter { //TODO кандидат на рефактор�
             throw new JsonParseException("Error when loading entities by path [%s]".formatted(worldStatePath), e);
         }
 
-        worldHolder.validateEntitiesStates();
+        if (needValidate) {
+            worldHolder.validateEntitiesStates();
+        }
     }
 
     private static void fillPrototypeLinkingInfo(

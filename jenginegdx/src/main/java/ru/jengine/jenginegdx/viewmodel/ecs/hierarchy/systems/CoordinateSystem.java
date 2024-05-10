@@ -2,6 +2,7 @@ package ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.systems;
 
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.All;
+import com.artemis.annotations.One;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.annotations.Bean;
@@ -13,6 +14,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesCompo
 @Bean
 @Order(5)
 @All(CoordinatesComponent.class)
+@One({DraggingComponent.class, DroppedComponent.class})
 public class CoordinateSystem extends IteratingSystem {
     private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<DraggingComponent> draggingComponentMapper;

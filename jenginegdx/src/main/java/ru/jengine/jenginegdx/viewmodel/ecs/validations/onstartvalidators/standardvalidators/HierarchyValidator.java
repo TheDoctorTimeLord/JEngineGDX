@@ -2,6 +2,7 @@ package ru.jengine.jenginegdx.viewmodel.ecs.validations.onstartvalidators.standa
 
 import com.artemis.*;
 import ru.jengine.beancontainer.annotations.Bean;
+import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.Shared;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
@@ -13,6 +14,7 @@ import static com.artemis.Aspect.all;
 
 @Bean
 @Shared
+@Order(100)
 public class HierarchyValidator implements WorldValidator {
     @Override
     public void validate(WorldHolder worldHolder) {
