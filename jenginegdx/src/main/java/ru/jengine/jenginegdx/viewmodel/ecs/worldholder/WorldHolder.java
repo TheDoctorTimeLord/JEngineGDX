@@ -11,7 +11,7 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.PreDestroy;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
-import ru.jengine.jenginegdx.viewmodel.ecs.validations.onstartvalidators.WorldValidationManager;
+import ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators.WorldValidationManager;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.EntityToWorldLoader;
 
 import java.util.HashMap;

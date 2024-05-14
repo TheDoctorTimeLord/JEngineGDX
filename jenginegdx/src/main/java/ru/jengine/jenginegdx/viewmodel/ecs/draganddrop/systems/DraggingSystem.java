@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PostConstruct;
+import ru.jengine.jenginegdx.Constants.Linking;
 import ru.jengine.jenginegdx.Constants.UserEvents;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingComponent;
@@ -65,17 +66,22 @@ public class DraggingSystem extends BaseSystem {
     }
 
     private void startDraggingEntity() {
-        int draggableEntityId = listener.draggableEntityId;
-        if (draggableEntityId != -1) {
+        int draggingInitiatorId = listener.draggingInitiatorId;
+        if (draggingInitiatorId != -1) {
             listener.setListenerMode(ListenerMode.WAITED_DROP);
-            MouseTouchedComponent mouse = mouseTouchedComponentMapper.get(draggableEntityId);
-            Vector3 coordinates = coordinatesComponentMapper.get(draggableEntityId).getCoordinates();
-            draggingComponentMapper.create(draggableEntityId)
+            MouseTouchedComponent mouse = mouseTouchedComponentMapper.get(draggingInitiatorId);
+            DraggingSettingsComponent draggingSettings = draggingSettingsComponentMapper.get(draggingInitiatorId);
+
+            int draggingId = linkToDraggingDelegate(draggingInitiatorId, draggingSettings);
+
+            Vector3 coordinates = coordinatesComponentMapper.get(draggingId).getCoordinates();
+            draggingComponentMapper.create(draggingId)
                     .draggingOffset(Vector2.Zero)
                     .offsetToMouse(
                             mouse.getX() - coordinates.x,
                             mouse.getY() - coordinates.y)
-                    .previousCoordinates(coordinates);
+                    .previousCoordinates(coordinates)
+                    .draggingSettingsEntity(draggingInitiatorId);
         }
     }
 
@@ -87,28 +93,29 @@ public class DraggingSystem extends BaseSystem {
     }
 
     private void dropEntityToHoldableContainer() {
-        int draggableEntityId = listener.draggableEntityId;
-        DraggingComponent dragging = draggingComponentMapper.get(draggableEntityId);
+        int draggingInitiatorId = listener.draggingInitiatorId;
+        DraggingSettingsComponent draggingSettings = draggingSettingsComponentMapper.get(draggingInitiatorId);
+        int draggingId = linkToDraggingDelegate(draggingInitiatorId, draggingSettings);
+        DraggingComponent dragging = draggingComponentMapper.get(draggingId);
+        MouseTouchedComponent mouse = mouseTouchedComponentMapper.get(draggingInitiatorId);
 
-        boolean hasContainer = hasContainerToDropping(draggableEntityId, dragging);
+        boolean hasContainer = hasContainerToDropping(draggingId, dragging.getXOffsetToMouse(),
+                dragging.getYOffsetToMouse(), draggingSettings.getDraggableType(), mouse.getX(), mouse.getY());
 
         Vector3 oldCoords = dragging.getPreviousCoordinate();
-        Vector3 newCoords = coordinatesComponentMapper.get(draggableEntityId).getCoordinates();
+        Vector3 entityCoords = hasContainer
+                ? coordinatesComponentMapper.get(draggingId).getCoordinates()
+                : oldCoords;
 
-        droppedComponentMapper.create(draggableEntityId).droppedTo(
-                hasContainer ? newCoords.x : oldCoords.x,
-                hasContainer ? newCoords.y : oldCoords.y,
-                oldCoords.z
-        );
+        droppedComponentMapper.create(draggingId).droppedTo(entityCoords.x, entityCoords.y, oldCoords.z);
 
-        draggingComponentMapper.remove(draggableEntityId);
+        draggingComponentMapper.remove(draggingId);
         listener.setListenerMode(ListenerMode.LISTEN_CANDIDATES);
     }
 
-    private boolean hasContainerToDropping(int draggableEntityId, DraggingComponent dragging) {
-        String draggingType = draggingSettingsComponentMapper.get(draggableEntityId).getDraggableType();
-        MouseTouchedComponent mouse = mouseTouchedComponentMapper.get(draggableEntityId);
-
+    private boolean hasContainerToDropping(int draggableEntityId, float offsetToMouseX, float offsetToMouseY,
+            String draggingType, float mouseX, float mouseY)
+    {
         IntBag entities = containerDroppedSubscription.getEntities();
         int[] ids = entities.getData();
         for (int i = 0; i < entities.size(); i++) {
@@ -121,19 +128,25 @@ public class DraggingSystem extends BaseSystem {
                     ? rotationComponentMapper.get(containerId).getRotation()
                     : RotationComponent.DEFAULT_ROTATION;
 
-            if (mouseTouchBound.inBound(mouse.getX(), mouse.getY(), coordinates.x, coordinates.y, rotation)
+            if (mouseTouchBound.inBound(mouseX, mouseY, coordinates.x, coordinates.y, rotation)
                     && containerDropped.getTargetDraggingType().equals(draggingType))
             {
                 containerDropped.getDroppedHandler().handle(
                         draggableEntityId,
                         containerId,
-                        mouse.getX(), mouse.getY(),
-                        dragging.getXOffsetToMouse(), dragging.getYOffsetToMouse(),
+                        mouseX, mouseY,
+                        offsetToMouseX, offsetToMouseY,
                         draggingType);
                 return true;
             }
         }
         return false;
+    }
+
+    private static int linkToDraggingDelegate(int draggableEntityId, DraggingSettingsComponent draggingSettings) {
+        return draggingSettings.getDraggingEntity() == Linking.LINK_TO_NULL
+                ? draggableEntityId
+                : draggingSettings.getDraggingEntity();
     }
 
     private enum ListenerMode {
@@ -145,7 +158,7 @@ public class DraggingSystem extends BaseSystem {
         private final ComponentMapper<DraggingComponent> draggingComponentMapper;
         private final ComponentMapper<DraggingSettingsComponent> draggingSettingsMapper;
         private ListenerMode listenerMode;
-        private int draggableEntityId;
+        private int draggingInitiatorId;
         private float maxZ;
 
         public DragAndDropListener(ComponentMapper<CoordinatesComponent> coordinatesComponentMapper,
@@ -162,7 +175,7 @@ public class DraggingSystem extends BaseSystem {
             this.listenerMode = listenerMode;
             if (ListenerMode.LISTEN_CANDIDATES.equals(listenerMode)) {
                 this.maxZ = Float.NEGATIVE_INFINITY;
-                this.draggableEntityId = -1;
+                this.draggingInitiatorId = -1;
             }
         }
 
@@ -178,17 +191,21 @@ public class DraggingSystem extends BaseSystem {
                 float candidateZCoordinate = coordinatesComponentMapper.get(target).getCoordinates().z;
                 if (maxZ <= candidateZCoordinate) {
                     maxZ = candidateZCoordinate;
-                    draggableEntityId = target;
+                    draggingInitiatorId = target;
                 }
             }
             if (ListenerMode.WAITED_DROP.equals(listenerMode) && UserEvents.DROP_TO.equals(userEvent.getEvent())) {
                 int target = userEvent.getTargetEntityId();
-                if (!draggingComponentMapper.has(target)) {
+                if (!draggingSettingsMapper.has(target)) {
+                    return;
+                }
+                DraggingSettingsComponent draggingSettings = draggingSettingsMapper.get(target);
+                if (!draggingComponentMapper.has(linkToDraggingDelegate(target, draggingSettings))) {
                     return;
                 }
 
                 setListenerMode(ListenerMode.HOLD_DROPPED_CANDIDATE);
-                draggableEntityId = target;
+                draggingInitiatorId = target;
             }
         }
     }

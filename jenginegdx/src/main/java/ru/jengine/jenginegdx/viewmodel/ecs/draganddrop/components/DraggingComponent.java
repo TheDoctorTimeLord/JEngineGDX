@@ -10,6 +10,7 @@ public class DraggingComponent extends PooledComponent {
     private float xOffsetToMouse;
     private float yOffsetToMouse;
     private Vector3 previousCoordinates;
+    private int draggingSettingsEntity;
 
     public DraggingComponent draggingOffset(Vector2 offset) {
         this.xDraggingOffset = offset.x;
@@ -25,8 +26,13 @@ public class DraggingComponent extends PooledComponent {
         return this;
     }
 
-    public void previousCoordinates(Vector3 previousCoordinates) {
+    public DraggingComponent previousCoordinates(Vector3 previousCoordinates) {
         this.previousCoordinates = previousCoordinates;
+        return this;
+    }
+
+    public void draggingSettingsEntity(int draggingSettingsEntity) {
+        this.draggingSettingsEntity = draggingSettingsEntity;
     }
 
     public float getXDraggingOffset() {
@@ -47,6 +53,10 @@ public class DraggingComponent extends PooledComponent {
 
     public Vector3 getPreviousCoordinate() {
         return previousCoordinates;
+    }
+
+    public int getDraggingSettingsEntity() {
+        return draggingSettingsEntity;
     }
 
     @Override

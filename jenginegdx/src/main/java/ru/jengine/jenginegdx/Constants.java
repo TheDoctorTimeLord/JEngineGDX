@@ -51,4 +51,8 @@ public interface Constants {
 
         String EMPTY_LINK = "none";
     }
+
+    interface Linking {
+        int LINK_TO_NULL = -1;
+    }
 }

@@ -6,6 +6,8 @@ import com.artemis.utils.IntBag;
 import com.google.gson.*;
 import org.reflections.ReflectionUtils;
 import ru.jengine.beancontainer.exceptions.ContainerException;
+import ru.jengine.jenginegdx.Constants.JsonFormatters;
+import ru.jengine.jenginegdx.Constants.Linking;
 import ru.jengine.jenginegdx.utils.JsonUtils;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.EntityLink;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.linking.LinkField.MultiLink;
@@ -55,19 +57,31 @@ public class EntityLinkingInfo {
         Class<?> fieldType = field.getType();
         JsonElement idField = componentFilling.get(fieldName);
 
-        if ((Integer.class.equals(fieldType) || int.class.equals(fieldType)) && JsonUtils.isString(idField)) {
-            componentFilling.addProperty(fieldName, -1);
-            return new SingleLink(fieldName, idField.getAsString());
+        if (isType(fieldType, Integer.class, int.class) && (JsonUtils.isNull(idField) || JsonUtils.isString(idField))) {
+            componentFilling.addProperty(fieldName, Linking.LINK_TO_NULL);
+            return new SingleLink(fieldName, JsonUtils.isNull(idField) ? JsonFormatters.EMPTY_LINK : idField.getAsString());
         }
-        if (IntBag.class.equals(fieldType) && idField.isJsonArray()) {
+        if (isType(fieldType, IntBag.class) && (JsonUtils.isNull(idField) || idField.isJsonArray())) {
             componentFilling.add(fieldName, JsonNull.INSTANCE);
-            return new MultiLink(fieldName, convertToStringArray(idField.getAsJsonArray()));
+            return new MultiLink(fieldName, convertToStringArray(idField));
         }
         throw new JsonParseException("Field [%s] with EntityId is incorrect type [%s] or value [%s] in [%s]"
                 .formatted(fieldName, fieldType, idField, componentFilling));
     }
 
-    private static String[] convertToStringArray(JsonArray jsonArray) {
+    private static boolean isType(Class<?> checkedType, Class<?>... variants) { //TODO вынести в утилитарные классы
+        for (Class<?> variant : variants) {
+            if (variant.equals(checkedType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String[] convertToStringArray(JsonElement jsonElement) {
+        if (JsonUtils.isNull(jsonElement)) return new String[0];
+
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
         String[] array = new String[jsonArray.size()];
         for (int i = 0; i < array.length; i++) {
             JsonElement element = jsonArray.get(i);

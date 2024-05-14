@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.validations.onstartvalidators;
+package ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators;
 
 import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 

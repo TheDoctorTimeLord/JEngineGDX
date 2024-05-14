@@ -60,7 +60,7 @@ public class ApplicationController extends JEngine {
 		WorldStateImporter stateImporter = container.getBean(WorldStateImporter.class);
 
 		DebuggingUtils.time("LOADING WORLD", () -> {
-			ResourceMetadata path = new ResourceMetadata(CoreNamespace.INTERNAL.getNamespace(), null, "ui.json");
+			ResourceMetadata path = new ResourceMetadata(CoreNamespace.INTERNAL.getNamespace(), null, "form.json");
 			stateImporter.loadState(worldHolder, path, false);
 		});
 
@@ -84,7 +84,7 @@ public class ApplicationController extends JEngine {
 		entity.create(TextureComponent.class).texture(img);
 		entity.create(VisibleComponent.class);
 		entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
-		entity.create(DraggingSettingsComponent.class).setDraggableType("simple");
+		entity.create(DraggingSettingsComponent.class).draggableType("simple");
 		entity.create(UserEventHandlingComponent.class)
 				.addHandling(InputEvents.MOUSE_START_DRAGGING, UserEvents.DRAG_AND_DROP)
 				.addHandling(InputEvents.MOUSE_DRAGGED_TO, UserEvents.DROP_TO);

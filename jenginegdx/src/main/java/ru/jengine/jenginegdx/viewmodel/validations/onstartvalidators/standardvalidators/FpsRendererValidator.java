@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.validations.onstartvalidators.standardvalidators;
+package ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators.standardvalidators;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
@@ -13,7 +13,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponen
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextStyleComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.validations.onstartvalidators.WorldValidator;
+import ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators.WorldValidator;
 import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 
 import static com.artemis.Aspect.all;

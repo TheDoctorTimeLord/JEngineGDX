@@ -17,7 +17,7 @@ public class LinkableEntityIdMapper {
     public int[] mapId(String key) {
         IntBag ids = entitiesById.get(key);
         if (ids == null) {
-            throw new JEngineGdxException("For entity id [%s] is not registered world entity id");
+            throw new JEngineGdxException("For entity id [%s] is not registered world entity id".formatted(key));
         }
         return Arrays.copyOf(ids.getData(), ids.size());
     }

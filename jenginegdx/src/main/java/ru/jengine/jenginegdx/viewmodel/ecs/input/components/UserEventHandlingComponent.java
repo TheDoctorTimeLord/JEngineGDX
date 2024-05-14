@@ -22,6 +22,10 @@ public class UserEventHandlingComponent extends Component implements CanBeFillin
         return eventHandling.get(event);
     }
 
+    public boolean hasHandling(String expectedHandling) {
+        return eventHandling.containsValue(expectedHandling);
+    }
+
     @Override
     public boolean fill(UserEventHandlingComponent other) {
         this.eventHandling.clear();

@@ -15,6 +15,7 @@ import ru.jengine.jenginegdx.viewmodel.stateimporting.linking.LinkableEntityIdMa
 import ru.jengine.jenginegdx.viewmodel.stateimporting.linking.WorldEntityLinker;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Bean
 public class EntityToWorldLoader {
@@ -34,7 +35,11 @@ public class EntityToWorldLoader {
             }
         }
 
-        entityLinker.linkEntities(world, linkingContext, idMapper);
+        List<String> entitiesIds = entities.stream()
+                .flatMap(entity -> Stream.concat(Stream.of(entity), entity.getChildren().stream()))
+                .map(EntityDto::getId)
+                .toList();
+        entityLinker.linkEntities(entitiesIds, world, linkingContext, idMapper);
     }
 
     private int loadEntity(World world, EntityDto entity, LinkableEntityIdMapper idMapper) {

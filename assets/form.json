@@ -24,28 +24,30 @@
   },
 
   "prototypes": {
-    "simpleDraggable": {
-      "#parent": "int:ui.json$superclasses.simpleDraggable",
-      "#type": "entity"
-    }
+
   },
   "entities": [
     {
-      "#parent": "int:ui.json$superclasses.simpleDraggable",
       "#type": "entity",
-      "id": "first"
-    },
-    {
-      "#parent": "int:ui.json$superclasses.simpleDraggable",
-      "#type": "entity",
-      "id": "second",
-      "coordinates": {"x": 100, "y": 0, "z": 0},
+      "id": "formBody",
+      "coordinates": {"x": 0, "y": -100, "z": 0},
+      "texture": {"texture": "int:form.json$images.badlogic.texture"},
+      "textureBound": {"width": 200, "height": 300},
+      "visible": {},
       "children": [
         {
-          "#parent": "int:ui.json$superclasses.simpleDraggable",
           "#type": "entity",
-          "coordinates": {"x": 100, "y": 40, "z": 0},
-          "draggingSettings": {"draggableType": "simple", "draggingEntity": "second"}
+          "id": "formBar",
+          "coordinates": {"x": 0, "y": 270, "z": 100},
+          "texture": {"texture": "int:form.json$images.badlogic.texture"},
+          "textureBound": {"width": 200, "height": 30},
+          "visible": {},
+          "mouseTouchBound": {"width": 200, "height": 30},
+          "draggingSettings": {"draggableType": "simple", "draggingEntity": "formBody"},
+          "userEventHandling": {
+            "mouse_StartDragging": "dragAndDrop",
+            "mouse_DraggedTo": "dropTo"
+          }
         }
       ]
     },
@@ -53,7 +55,7 @@
       "#type": "entity",
       "id": "container",
       "coordinates": {"x": -320, "y": -240, "z": -10},
-      "texture": {"texture": "int:ui.json$images.badlogic.texture"},
+      "texture": {"texture": "int:form.json$images.badlogic.texture"},
       "visible": {},
       "mouseTouchBound": {"width": 320, "height": 480},
       "textureBound": {"width": 320, "height": 480},

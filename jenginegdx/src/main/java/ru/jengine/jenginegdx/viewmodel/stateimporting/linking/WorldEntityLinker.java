@@ -12,13 +12,19 @@ import ru.jengine.jenginegdx.viewmodel.stateimporting.linking.LinkField.SingleLi
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 
 @Bean
 public class WorldEntityLinker {
-    public void linkEntities(World world, EntityLinkingInfo linkingInfo, LinkableEntityIdMapper entityIdMapper) {
-        for (EntityComponentsHolder holder : linkingInfo.getEntityComponentsHolders()) {
-            for (int worldEntityId : entityIdMapper.mapId(holder.getEntityId())) {
+    public void linkEntities(List<String> ids, World world, EntityLinkingInfo linkingInfo,
+            LinkableEntityIdMapper entityIdMapper)
+    {
+        for (String entityJsonId : ids) {
+            EntityComponentsHolder holder = linkingInfo.getEntityComponentsHolder(entityJsonId);
+            if (holder == null) continue;
+
+            for (int worldEntityId : entityIdMapper.mapId(entityJsonId)) {
                 Entity entity = world.getEntity(worldEntityId);
                 for (Entry<Class<? extends Component>, LinkField[]> componentEntry : holder.iteratingByComponents()) {
                     Component component = entity.getComponent(componentEntry.getKey());
@@ -32,7 +38,8 @@ public class WorldEntityLinker {
 
     private static void linkComponent(Component component, LinkField field, LinkableEntityIdMapper idMapper) {
         try {
-            Field linkingField = component.getClass().getField(field.getField());
+            Field linkingField = component.getClass().getDeclaredField(field.getField());
+            linkingField.setAccessible(true);
             if (field instanceof SingleLink single && !JsonFormatters.EMPTY_LINK.equals(single.getLink())) {
                 int[] links = idMapper.mapId(single.getLink());
                 if (links.length > 1) {

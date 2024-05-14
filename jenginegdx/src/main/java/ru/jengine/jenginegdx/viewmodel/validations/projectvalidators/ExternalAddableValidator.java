@@ -1,4 +1,4 @@
-package ru.jengine.jenginegdx.viewmodel.ecs.validations.projectvalidators;
+package ru.jengine.jenginegdx.viewmodel.validations.projectvalidators;
 
 import com.artemis.Component;
 import com.artemis.Entity;
