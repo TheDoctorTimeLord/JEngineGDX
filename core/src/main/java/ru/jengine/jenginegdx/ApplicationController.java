@@ -7,6 +7,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector3;
 import ru.jengine.beancontainer.JEngineContainer;
 import ru.jengine.beancontainer.configuration.DefaultContainerConfigurationBuilder;
 import ru.jengine.jenginegdx.Constants.Contexts;
@@ -178,6 +179,11 @@ public class ApplicationController extends JEngine {
 		}
 
 		@Override
+		public boolean isSystemsHandler() {
+			return true;
+		}
+
+		@Override
 		public String[] getHandlingEventNames() {
 			return HANDLING_EVENTS;
 		}
@@ -212,6 +218,61 @@ public class ApplicationController extends JEngine {
 			{
 				worldHolder.loadPrototype("simpleDraggable");
 			}
+		}
+	}
+
+	public static class ClickHandler implements NamedEventHandler<InputMappingEvent> {
+		@Override
+		public boolean isSystemsHandler() {
+			return false;
+		}
+
+		@Override
+		public String[] getHandlingEventNames() {
+			return new String[] { "click" };
+		}
+
+		@Override
+		public HandlingResult handle(String eventName, InputMappingEvent sourceEvent) {
+			Gdx.app.log("CLICK", eventName + " by " + sourceEvent.getTargetEntityId());
+			return HandlingResult.PROCESS;
+		}
+	}
+
+	public static class ValidClickHandler implements NamedEventHandler<InputMappingEvent> {
+		private ComponentMapper<MouseTouchedComponent> mouseTouchedComponentMapper;
+		private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
+		private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
+
+		@Override
+		public boolean isSystemsHandler() {
+			return false;
+		}
+
+		@Override
+		public String[] getHandlingEventNames() {
+			return new String[] { "validClick" };
+		}
+
+		@Override
+		public HandlingResult handle(String eventName, InputMappingEvent sourceEvent) {
+			int clickable = sourceEvent.getTargetEntityId();
+			MouseTouchedComponent mouseTouched = mouseTouchedComponentMapper.get(clickable);
+			MouseTouchBoundComponent mouseTouchBound = mouseTouchBoundComponentMapper.get(clickable);
+			Vector3 coordinates = coordinatesComponentMapper.get(clickable).getCoordinates();
+
+			float boundX = coordinates.x + mouseTouchBound.getBoundOffsetX();
+			float boundY = coordinates.y + mouseTouchBound.getBoundOffsetY();
+			float mouseX = mouseTouched.getX();
+			float mouseY = mouseTouched.getY();
+
+			if (boundX <= mouseX && mouseX <= boundX + mouseTouchBound.getWidth() / 2
+					&& boundY <= mouseY && mouseY <= boundY + mouseTouchBound.getHeight() / 2)
+			{
+				return HandlingResult.STOP;
+			}
+
+			return HandlingResult.PROCESS;
 		}
 	}
 }

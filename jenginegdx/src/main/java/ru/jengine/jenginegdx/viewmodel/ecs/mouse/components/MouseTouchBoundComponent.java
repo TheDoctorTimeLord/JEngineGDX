@@ -30,6 +30,22 @@ public class MouseTouchBoundComponent extends PooledComponent implements CanBeFi
         return 0 <= actualX && actualX <= width && 0 <= actualY && actualY <= height;
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public float getBoundOffsetX() {
+        return boundOffsetX;
+    }
+
+    public float getBoundOffsetY() {
+        return boundOffsetY;
+    }
+
     @Override
     protected void reset() {
         bounds(0, 0, 0, 0);

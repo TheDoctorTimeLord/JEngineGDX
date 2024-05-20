@@ -183,6 +183,11 @@ public class DraggingSystem extends BaseSystem {
         }
 
         @Override
+        public boolean isSystemsHandler() {
+            return true;
+        }
+
+        @Override
         public String[] getHandlingEventNames() {
             return LISTEN_EVENTS;
         }

@@ -43,6 +43,10 @@ public class EventBus extends BaseSystem
         namedEventHandlerManager.registerHandler(handler);
     }
 
+    public void clearNotSystemNamedHandlers() {
+        namedEventHandlerManager.clearNotSystemHandlers();
+    }
+
     public void registerEvent(EventBusEvent event) {
         dispatcher.registerEvent(event);
     }

@@ -9,11 +9,11 @@
   "superclasses": {
     "simpleDraggable": {
       "coordinates": {"x": 0, "y": 0, "z": 0},
-      "texture": {"texture": "int:ui.json$images.badlogic.texture"},
+      "texture": {"texture": "int:form.json$images.badlogic.texture"},
       "visible": {},
       "mouseTouchBound": {
-        "width": "int:ui.json$images.badlogic.width",
-        "height": "int:ui.json$images.badlogic.height"
+        "width": "int:form.json$images.badlogic.width",
+        "height": "int:form.json$images.badlogic.height"
       },
       "draggingSettings": {"draggableType": "simple"},
       "userEventHandling": {
@@ -23,8 +23,15 @@
     }
   },
 
+  "eventHandlers": [
+    {"#jclass": "ru.jengine.jenginegdx.ApplicationController$ClickHandler"},
+    {"#jclass": "ru.jengine.jenginegdx.ApplicationController$ValidClickHandler"}
+  ],
   "prototypes": {
-
+    "simpleDraggable": {
+      "#parent": "int:form.json$superclasses.simpleDraggable",
+      "#type": "entity"
+    }
   },
   "entities": [
     {
@@ -62,6 +69,22 @@
       "droppedContainer": {
         "targetDraggingType": "simple",
         "droppedHandler": "ru.jengine.jenginegdx.ApplicationController$SimpleDroppedHandler"
+      }
+    },
+    {
+      "#type": "entity",
+      "id": "clickable",
+      "coordinates": {"x": 64, "y": 0},
+      "texture": {"texture": "int:form.json$images.badlogic.texture"},
+      "visible": {},
+      "mouseTouchBound": {
+        "width": "int:form.json$images.badlogic.width",
+        "height": "int:form.json$images.badlogic.height"
+      },
+      "draggingSettings": {"draggableType": "simple"},
+      "userEventHandling": {
+        "mouse_StartDragging": ["click", "validClick", "dragAndDrop"],
+        "mouse_DraggedTo": ["click", "dropTo"]
       }
     }
   ]

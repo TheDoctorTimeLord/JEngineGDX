@@ -11,8 +11,9 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.PreDestroy;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
-import ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators.WorldValidationManager;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.EntityToWorldLoader;
+import ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators.WorldValidationManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +23,17 @@ import java.util.Set;
 @Bean
 public class WorldHolder {
     private final World world;
+    private final EventBus eventBus;
     private final EntityToWorldLoader entityToWorldLoader;
     private final WorldValidationManager worldValidationManager;
     private final BatchUpdatableInvocationStrategy updatableInvocationStrategy;
     private final Map<String, EntityPrototype> prototypes = new HashMap<>();
 
     @Api(@ApiElement(index = 0, message = "Add bean extends 'WorldSystemsHolder' with ECS systems list."))
-    public WorldHolder(WorldSystemsHolder ecsSystems, EntityToWorldLoader entityToWorldLoader,
-            WorldValidationManager worldValidationManager) {
+    public WorldHolder(WorldSystemsHolder ecsSystems, EventBus eventBus, EntityToWorldLoader entityToWorldLoader,
+            WorldValidationManager worldValidationManager)
+    {
+        this.eventBus = eventBus;
         this.entityToWorldLoader = entityToWorldLoader;
         this.worldValidationManager = worldValidationManager;
 
@@ -83,6 +87,7 @@ public class WorldHolder {
         world.getEntityManager().reset();
 
         prototypes.clear();
+        eventBus.clearNotSystemNamedHandlers();
     }
 
     @PreDestroy

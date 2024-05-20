@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 @Bean
 public class NamedEventHandlerManager {
@@ -32,6 +33,19 @@ public class NamedEventHandlerManager {
         Map<String, NamedEventHandler<?>> handlersByEvents = getHandlingMapprings(namedEventHandler);
         for (String eventName : namedEventHandler.getHandlingEventNames()) {
             handlersByEvents.remove(eventName);
+        }
+    }
+
+    public void clearNotSystemHandlers() {
+        for (Map<String, NamedEventHandler<?>> eventHandlers : namedEventHandlers.values()) {
+            List<String> subevents = eventHandlers.entrySet().stream()
+                    .filter(e -> !e.getValue().isSystemsHandler())
+                    .map(Entry::getKey)
+                    .toList();
+
+            for (String subevent : subevents) {
+                eventHandlers.remove(subevent);
+            }
         }
     }
 
