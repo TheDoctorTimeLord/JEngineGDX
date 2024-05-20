@@ -1,5 +1,6 @@
 package ru.jengine.jenginegdx.viewmodel.stateimporting.deserializers;
 
+import com.google.common.collect.Streams;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,10 +27,26 @@ public class UserEventHandlingComponentDeserializer implements JsonConverterDese
         UserEventHandlingComponent userEventHandling = new UserEventHandlingComponent();
         for (Entry<String, JsonElement> entry : object.entrySet()) {
             JsonElement mapping = entry.getValue();
-            if (!JsonUtils.isString(mapping)) {
-                throw new JsonParseException("JSON of user events must contain mappings with format ['from event' : 'to event'] but actual [%s]".formatted(json));
+            if (JsonUtils.isString(mapping)) {
+                userEventHandling.addHandling(entry.getKey(), mapping.getAsString());
             }
-            userEventHandling.addHandling(entry.getKey(), mapping.getAsString());
+            else if (mapping.isJsonArray()) {
+                userEventHandling.addHandling(entry.getKey(), Streams.stream(mapping.getAsJsonArray())
+                        .map(element -> {
+                            if (!JsonUtils.isString(element)) {
+                                throw new JsonParseException(("JSON of user events must contain mappings with format " +
+                                        "['from event' : 'to event'] or ['form event' : ['to event 1', 'to event 2', " +
+                                        "...]] but actual [%s]").formatted(json));
+                            }
+                            return element.getAsString();
+                        })
+                        .toArray(String[]::new));
+            }
+            else {
+                throw new JsonParseException(("JSON of user events must contain mappings with format " +
+                        "['from event' : 'to event'] or ['form event' : ['to event 1', 'to event 2', ...]] but actual" +
+                        " [%s]").formatted(json));
+            }
         }
         return userEventHandling;
     }

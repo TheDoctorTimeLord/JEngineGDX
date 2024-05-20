@@ -13,9 +13,10 @@ import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PostConstruct;
 import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.viewmodel.camera.GameCamera;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.SequentialEventHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.events.InputMappingEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.systems.InputProcessingSystem;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.RotationComponent;
@@ -49,7 +50,12 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
     }
 
     @PostConstruct
-    private void setMouseTrigger() {
+    private void setEventHandlers(EventBus eventBus) {
+        eventBus.registerHandler(new SequentialEventHandler<>(InputMappingEvent.class));
+    }
+
+    @Override
+    protected void initialize() {
         world.getSystem(InputProcessingSystem.class).registerTrigger(new MouseInputTrigger(camera));
     }
 
@@ -80,9 +86,9 @@ public class MouseEventDispatchingSystem extends IteratingSystem {
         for (ClickableBoundedEntity entity : clickableBoundedEntities) {
             if (entity.inBound(mouseX, mouseY)) {
                 mouseTouchedComponentMapper.create(entity.id).setTouched(mouseX, mouseY);
-                String handling = entity.userEventHandling.getHandling(eventTypeCode);
+                String[] handling = entity.userEventHandling.getHandling(eventTypeCode);
                 if (handling != null) {
-                    eventBus.registerEvent(new UserEvent(entity.id, handling));
+                    eventBus.registerEvent(new InputMappingEvent(entity.id, handling));
                 }
             }
         }

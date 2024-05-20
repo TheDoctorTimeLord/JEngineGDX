@@ -18,20 +18,21 @@ import ru.jengine.jenginegdx.utils.DebuggingUtils;
 import ru.jengine.jenginegdx.view.texture.TextureBoundComponent;
 import ru.jengine.jenginegdx.view.texture.TextureComponent;
 import ru.jengine.jenginegdx.viewmodel.JEngine;
-import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.DroppedHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedContainerComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.HandlingResult;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.NamedEventHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.events.InputMappingEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.CoreNamespace;
 import ru.jengine.jenginegdx.viewmodel.stateimporting.WorldStateImporter;
 import ru.jengine.jsonconverter.resources.ResourceMetadata;
@@ -73,7 +74,7 @@ public class ApplicationController extends JEngine {
 		attachFpsTracker(container);
 
 		EventBus eventBus = container.getBean(EventBus.class);
-		eventBus.registerHandler(new UserEventSinglePostHandler(worldHolder.getWorld()));
+		eventBus.registerNamedHandler(new UserEventSinglePostHandler(worldHolder.getWorld()));
 	}
 
 	private void spawnSingleEntity(JEngineContainer container, float xOffset) {
@@ -160,7 +161,16 @@ public class ApplicationController extends JEngine {
 		img.dispose();
 	}
 
-	private static class UserEventSinglePostHandler extends SinglePostHandler<UserEvent> {
+	private static class UserEventSinglePostHandler implements NamedEventHandler<InputMappingEvent> {
+		private static final String[] HANDLING_EVENTS = new String[] {
+				InputEvents.MOUSE_TOUCH_DOWN,
+				InputEvents.MOUSE_TOUCH_UP,
+				InputEvents.MOUSE_MOVE,
+				InputEvents.MOUSE_START_DRAGGING,
+				InputEvents.MOUSE_DRAGGING,
+				InputEvents.MOUSE_DRAGGED_TO
+		};
+
 		private ComponentMapper<MouseTouchedComponent> mouseTouchedComponentMapper;
 
 		public UserEventSinglePostHandler(World world) {
@@ -168,12 +178,17 @@ public class ApplicationController extends JEngine {
 		}
 
 		@Override
-		public void handle(UserEvent event) {
-			StringBuilder builder = new StringBuilder();
-			builder.append(event.getEvent());
+		public String[] getHandlingEventNames() {
+			return HANDLING_EVENTS;
+		}
 
-			if (mouseTouchedComponentMapper.has(event.getTargetEntityId())) {
-				MouseTouchedComponent component = mouseTouchedComponentMapper.get(event.getTargetEntityId());
+		@Override
+		public HandlingResult handle(String event, InputMappingEvent sourceEvent) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(event);
+
+			if (mouseTouchedComponentMapper.has(sourceEvent.getTargetEntityId())) {
+				MouseTouchedComponent component = mouseTouchedComponentMapper.get(sourceEvent.getTargetEntityId());
 				builder.append(", on {");
 				builder.append(component.getX());
 				builder.append(",");
@@ -182,6 +197,7 @@ public class ApplicationController extends JEngine {
 			}
 
 			Gdx.app.log("HANDLED", builder.toString());
+			return HandlingResult.PROCESS;
 		}
 	}
 

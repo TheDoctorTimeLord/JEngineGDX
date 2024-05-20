@@ -17,10 +17,11 @@ import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingCompon
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedContainerComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.SinglePostHandler;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.HandlingResult;
+import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.NamedEventHandler;
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.events.UserEvent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.events.InputMappingEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.RotationComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
@@ -51,7 +52,7 @@ public class DraggingSystem extends BaseSystem {
 
         listener = new DragAndDropListener(coordinatesComponentMapper, draggingComponentMapper,
                 draggingSettingsComponentMapper);
-        eventBus.registerHandler(listener);
+        eventBus.registerNamedHandler(listener);
     }
 
     @Override
@@ -153,7 +154,9 @@ public class DraggingSystem extends BaseSystem {
         LISTEN_CANDIDATES, HOLD_DROPPED_CANDIDATE, WAITED_DROP
     }
 
-    private static class DragAndDropListener extends SinglePostHandler<UserEvent> {
+    private static class DragAndDropListener implements NamedEventHandler<InputMappingEvent> {
+        private static final String[] LISTEN_EVENTS = {UserEvents.DRAG_AND_DROP, UserEvents.DROP_TO};
+
         private final ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
         private final ComponentMapper<DraggingComponent> draggingComponentMapper;
         private final ComponentMapper<DraggingSettingsComponent> draggingSettingsMapper;
@@ -180,12 +183,17 @@ public class DraggingSystem extends BaseSystem {
         }
 
         @Override
-        public void handle(UserEvent userEvent) {
-            if (ListenerMode.LISTEN_CANDIDATES.equals(listenerMode) && UserEvents.DRAG_AND_DROP.equals(userEvent.getEvent())) {
-                int target = userEvent.getTargetEntityId();
+        public String[] getHandlingEventNames() {
+            return LISTEN_EVENTS;
+        }
+
+        @Override
+        public HandlingResult handle(String event, InputMappingEvent sourceEvent) {
+            if (ListenerMode.LISTEN_CANDIDATES.equals(listenerMode) && UserEvents.DRAG_AND_DROP.equals(event)) {
+                int target = sourceEvent.getTargetEntityId();
                 if (!coordinatesComponentMapper.has(target) || !draggingSettingsMapper.has(target))
                 {
-                    return;
+                    return HandlingResult.PROCESS;
                 }
 
                 float candidateZCoordinate = coordinatesComponentMapper.get(target).getCoordinates().z;
@@ -194,19 +202,20 @@ public class DraggingSystem extends BaseSystem {
                     draggingInitiatorId = target;
                 }
             }
-            if (ListenerMode.WAITED_DROP.equals(listenerMode) && UserEvents.DROP_TO.equals(userEvent.getEvent())) {
-                int target = userEvent.getTargetEntityId();
+            if (ListenerMode.WAITED_DROP.equals(listenerMode) && UserEvents.DROP_TO.equals(event)) {
+                int target = sourceEvent.getTargetEntityId();
                 if (!draggingSettingsMapper.has(target)) {
-                    return;
+                    return HandlingResult.PROCESS;
                 }
                 DraggingSettingsComponent draggingSettings = draggingSettingsMapper.get(target);
                 if (!draggingComponentMapper.has(linkToDraggingDelegate(target, draggingSettings))) {
-                    return;
+                    return HandlingResult.PROCESS;
                 }
 
                 setListenerMode(ListenerMode.HOLD_DROPPED_CANDIDATE);
                 draggingInitiatorId = target;
             }
+            return HandlingResult.PROCESS;
         }
     }
 }
