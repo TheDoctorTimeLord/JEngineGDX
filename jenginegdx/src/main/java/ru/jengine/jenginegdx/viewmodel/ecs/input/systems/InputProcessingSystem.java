@@ -1,7 +1,6 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.input.systems;
 
 import com.artemis.BaseSystem;
-import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import ru.jengine.beancontainer.annotations.Bean;
@@ -15,7 +14,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Bean
-@Order(1)
+@Order(50)
 public class InputProcessingSystem extends BaseSystem implements InputProcessor {
     private final Collection<InputTrigger> inputTriggers = new ArrayList<>();
     private final Queue<InputTrigger> addedTriggers = new ConcurrentLinkedDeque<>();
@@ -35,8 +34,7 @@ public class InputProcessingSystem extends BaseSystem implements InputProcessor 
     }
 
     @Override
-    protected void setWorld(World world) {
-        super.setWorld(world);
+    protected void initialize() {
         eventGenerator = new EventGenerator(world);
     }
 

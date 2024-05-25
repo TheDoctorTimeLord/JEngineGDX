@@ -28,9 +28,9 @@ import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.NamedEventH
 import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.components.InputEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.InputMappingEvent;
-import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.components.InputBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
@@ -85,9 +85,9 @@ public class ApplicationController extends JEngine {
 		entity.create(CoordinatesComponent.class).coordinates(xOffset, 0, 0);
 		entity.create(TextureComponent.class).texture(img);
 		entity.create(VisibleComponent.class);
-		entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
+		entity.create(InputBoundComponent.class).bounds(img.getWidth(), img.getHeight());
 		entity.create(DraggingSettingsComponent.class).draggableType("simple");
-		entity.create(UserEventHandlingComponent.class)
+		entity.create(InputEventHandlingComponent.class)
 				.addHandling(InputEvents.MOUSE_START_DRAGGING, UserEvents.DRAG_AND_DROP)
 				.addHandling(InputEvents.MOUSE_DRAGGED_TO, UserEvents.DROP_TO);
 	}
@@ -100,7 +100,7 @@ public class ApplicationController extends JEngine {
 		entity.create(TextureComponent.class).texture(img);
 		entity.create(TextureBoundComponent.class).bound((float) width / 2, height);
 		entity.create(VisibleComponent.class);
-		entity.create(MouseTouchBoundComponent.class).bounds((float) width / 2, height);
+		entity.create(InputBoundComponent.class).bounds((float) width / 2, height);
 		entity.create(DroppedContainerComponent.class).droppedHandler("simple", new DroppedHandler() {
 			@Override
 			public void handle(int target, int container, float droppedX, float droppedY, float xOffsetToMouse, float yOffsetToMouse,
@@ -111,8 +111,8 @@ public class ApplicationController extends JEngine {
 //						: textureBoundComponentMapper.create(target);
 //				textureBound.bound(100, 100);
 //
-//				if (mouseTouchBoundComponentMapper.has(target)) {
-//					mouseTouchBoundComponentMapper.get(target).bounds(100, 100);
+//				if (inputBoundComponentMapper.has(target)) {
+//					inputBoundComponentMapper.get(target).bounds(100, 100);
 //				}
 			}
 		});
@@ -128,8 +128,8 @@ public class ApplicationController extends JEngine {
 				entity.create(CoordinatesComponent.class).coordinates(x, y, 0);
 				entity.create(TextureComponent.class).texture(img);
 				entity.create(VisibleComponent.class);
-				entity.create(MouseTouchBoundComponent.class).bounds(img.getWidth(), img.getHeight());
-				entity.create(UserEventHandlingComponent.class)
+				entity.create(InputBoundComponent.class).bounds(img.getWidth(), img.getHeight());
+				entity.create(InputEventHandlingComponent.class)
 						.addHandling(InputEvents.MOUSE_TOUCH_DOWN, "touched" + counter++);
 			}
 		}
@@ -140,8 +140,8 @@ public class ApplicationController extends JEngine {
 
 		EntityEdit entity = world.createEntity().edit();
 		entity.create(CoordinatesComponent.class).coordinates((float) -width / 2, (float) -height / 2, 0);
-		entity.create(MouseTouchBoundComponent.class).bounds(width, height);
-		entity.create(UserEventHandlingComponent.class)
+		entity.create(InputBoundComponent.class).bounds(width, height);
+		entity.create(InputEventHandlingComponent.class)
 				.addHandling(InputEvents.MOUSE_TOUCH_DOWN, InputEvents.MOUSE_TOUCH_DOWN)
 				.addHandling(InputEvents.MOUSE_TOUCH_UP, InputEvents.MOUSE_TOUCH_UP)
 				.addHandling(InputEvents.MOUSE_MOVE, InputEvents.MOUSE_MOVE)
@@ -241,7 +241,7 @@ public class ApplicationController extends JEngine {
 
 	public static class ValidClickHandler implements NamedEventHandler<InputMappingEvent> {
 		private ComponentMapper<MouseTouchedComponent> mouseTouchedComponentMapper;
-		private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
+		private ComponentMapper<InputBoundComponent> inputBoundComponentMapper;
 		private ComponentMapper<CoordinatesComponent> coordinatesComponentMapper;
 
 		@Override
@@ -258,16 +258,16 @@ public class ApplicationController extends JEngine {
 		public HandlingResult handle(String eventName, InputMappingEvent sourceEvent) {
 			int clickable = sourceEvent.getTargetEntityId();
 			MouseTouchedComponent mouseTouched = mouseTouchedComponentMapper.get(clickable);
-			MouseTouchBoundComponent mouseTouchBound = mouseTouchBoundComponentMapper.get(clickable);
+			InputBoundComponent inputBound = inputBoundComponentMapper.get(clickable);
 			Vector3 coordinates = coordinatesComponentMapper.get(clickable).getCoordinates();
 
-			float boundX = coordinates.x + mouseTouchBound.getBoundOffsetX();
-			float boundY = coordinates.y + mouseTouchBound.getBoundOffsetY();
+			float boundX = coordinates.x + inputBound.getBoundOffsetX();
+			float boundY = coordinates.y + inputBound.getBoundOffsetY();
 			float mouseX = mouseTouched.getX();
 			float mouseY = mouseTouched.getY();
 
-			if (boundX <= mouseX && mouseX <= boundX + mouseTouchBound.getWidth() / 2
-					&& boundY <= mouseY && mouseY <= boundY + mouseTouchBound.getHeight() / 2)
+			if (boundX <= mouseX && mouseX <= boundX + inputBound.getWidth() / 2
+					&& boundY <= mouseY && mouseY <= boundY + inputBound.getHeight() / 2)
 			{
 				return HandlingResult.STOP;
 			}

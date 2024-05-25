@@ -12,7 +12,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.MutateHierarchyR
 
 
 @Bean
-@Order(4)
+@Order(100)
 @One(MutateHierarchyComponent.class)
 public class MutateHierarchySystem extends IteratingSystem {
     private ComponentMapper<HierarchyComponent> hierarchyMapper;

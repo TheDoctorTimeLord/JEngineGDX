@@ -9,7 +9,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FrameRateTextCompone
 import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextComponent;
 
 @Bean
-@Order(768)
+@Order(2000)
 @One(FrameRateTextComponent.class)
 public class TextSystem extends IteratingSystem {
     private ComponentMapper<FrameRateTextComponent> frameRateTextComponentMapper;

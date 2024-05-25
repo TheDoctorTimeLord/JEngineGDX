@@ -11,12 +11,15 @@
       "coordinates": {"x": 0, "y": 0, "z": 0},
       "texture": {"texture": "int:form.json$images.badlogic.texture"},
       "visible": {},
-      "mouseTouchBound": {
+      "inputBound": {
         "width": "int:form.json$images.badlogic.width",
         "height": "int:form.json$images.badlogic.height"
       },
+      "focusSettings": {
+        "focusLoseHandler": "ru.jengine.jenginegdx.viewmodel.ecs.focus.handlers.DefaultFocusLoseHandler"
+      },
       "draggingSettings": {"draggableType": "simple"},
-      "userEventHandling": {
+      "inputEventHandling": {
         "mouse_StartDragging": "dragAndDrop",
         "mouse_DraggedTo": "dropTo"
       }
@@ -49,9 +52,9 @@
           "texture": {"texture": "int:form.json$images.badlogic.texture"},
           "textureBound": {"width": 200, "height": 30},
           "visible": {},
-          "mouseTouchBound": {"width": 200, "height": 30},
+          "inputBound": {"width": 200, "height": 30},
           "draggingSettings": {"draggableType": "simple", "draggingEntity": "formBody"},
-          "userEventHandling": {
+          "inputEventHandling": {
             "mouse_StartDragging": "dragAndDrop",
             "mouse_DraggedTo": "dropTo"
           }
@@ -64,7 +67,7 @@
       "coordinates": {"x": -320, "y": -240, "z": -10},
       "texture": {"texture": "int:form.json$images.badlogic.texture"},
       "visible": {},
-      "mouseTouchBound": {"width": 320, "height": 480},
+      "inputBound": {"width": 320, "height": 480},
       "textureBound": {"width": 320, "height": 480},
       "droppedContainer": {
         "targetDraggingType": "simple",
@@ -77,12 +80,12 @@
       "coordinates": {"x": 64, "y": 0},
       "texture": {"texture": "int:form.json$images.badlogic.texture"},
       "visible": {},
-      "mouseTouchBound": {
+      "inputBound": {
         "width": "int:form.json$images.badlogic.width",
         "height": "int:form.json$images.badlogic.height"
       },
       "draggingSettings": {"draggableType": "simple"},
-      "userEventHandling": {
+      "inputEventHandling": {
         "mouse_StartDragging": ["click", "validClick", "dragAndDrop"],
         "mouse_DraggedTo": ["click", "dropTo"]
       }

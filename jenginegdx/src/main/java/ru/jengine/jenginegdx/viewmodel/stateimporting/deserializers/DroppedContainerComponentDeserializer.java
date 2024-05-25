@@ -12,7 +12,6 @@ import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 import ru.jengine.jsonconverter.formatting.FormatterContext;
 import ru.jengine.jsonconverter.serializeprocess.JsonConverterDeserializer;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 @Bean
@@ -33,25 +32,9 @@ public class DroppedContainerComponentDeserializer implements JsonConverterDeser
         JsonObject jsonObject = json.getAsJsonObject();
         String targetType = FormatterContext.asString(jsonObject, "targetDraggingType");
         String droppedHandlerClassName = FormatterContext.asString(jsonObject, "droppedHandler");
-        DroppedHandler droppedHandler = createByClassName(droppedHandlerClassName);
+        DroppedHandler droppedHandler = HandlerLoader.createHandler(droppedHandlerClassName, DroppedHandler.class);
         droppedHandler.setWorldHolder(worldHolder);
 
         return new DroppedContainerComponent().droppedHandler(targetType, droppedHandler);
-    }
-
-    private static DroppedHandler createByClassName(String droppedHandlerClassName) {
-        try {
-            Class<?> droppedHandlerClass =
-                    DroppedContainerComponentDeserializer.class.getClassLoader().loadClass(droppedHandlerClassName);
-            Object droppedHandler = droppedHandlerClass.getConstructor().newInstance();
-            if (!(droppedHandler instanceof DroppedHandler handler)) {
-                throw new JsonParseException("Object of [%s] is not DroppedHandler".formatted(droppedHandlerClass));
-            }
-            return handler;
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException |
-                 NoSuchMethodException e)
-        {
-            throw new JsonParseException("Error when creating DroppedHandler [%s]".formatted(droppedHandlerClassName), e);
-        }
     }
 }

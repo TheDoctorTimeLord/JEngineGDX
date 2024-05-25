@@ -1,6 +1,5 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.rendering.systems;
 
-import com.artemis.World;
 import com.artemis.annotations.All;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -8,15 +7,15 @@ import ru.jengine.beancontainer.annotations.Bean;
 import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.beancontainer.annotations.PostConstruct;
 import ru.jengine.jenginegdx.container.JEngineGdxConfiguration;
-import ru.jengine.jenginegdx.viewmodel.ecs.utils.SortedByZIteratingSystem;
 import ru.jengine.jenginegdx.viewmodel.camera.GameCamera;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.components.VisibleComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.utils.SortedByZIteratingSystem;
 
 import java.util.List;
 
 @Bean
-@Order(1024)
+@Order(65536)
 @All(VisibleComponent.class)
 public class RenderingSystem extends SortedByZIteratingSystem {
     private final Batch batch;
@@ -27,11 +26,6 @@ public class RenderingSystem extends SortedByZIteratingSystem {
         this.gameCamera = gameCamera;
         this.batch = configuration.getBatch();
         this.subsystems = subsystems;
-    }
-
-    @Override
-    protected void setWorld(World world) {
-        super.setWorld(world);
     }
 
     @PostConstruct

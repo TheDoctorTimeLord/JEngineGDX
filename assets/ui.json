@@ -11,12 +11,12 @@
       "coordinates": {"x": 0, "y": 0, "z": 0},
       "texture": {"texture": "int:ui.json$images.badlogic.texture"},
       "visible": {},
-      "mouseTouchBound": {
+      "inputBound": {
         "width": "int:ui.json$images.badlogic.width",
         "height": "int:ui.json$images.badlogic.height"
       },
       "draggingSettings": {"draggableType": "simple"},
-      "userEventHandling": {
+      "inputEventHandling": {
         "mouse_StartDragging": "dragAndDrop",
         "mouse_DraggedTo": "dropTo"
       }
@@ -55,7 +55,7 @@
       "coordinates": {"x": -320, "y": -240, "z": -10},
       "texture": {"texture": "int:ui.json$images.badlogic.texture"},
       "visible": {},
-      "mouseTouchBound": {"width": 320, "height": 480},
+      "inputBound": {"width": 320, "height": 480},
       "textureBound": {"width": 320, "height": 480},
       "droppedContainer": {
         "targetDraggingType": "simple",

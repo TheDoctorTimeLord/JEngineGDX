@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import ru.jengine.beancontainer.annotations.Bean;
+import ru.jengine.beancontainer.annotations.Order;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.rendering.RenderSubsystem;
 import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextComponent;
@@ -13,6 +14,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextPositionComponent
 import ru.jengine.jenginegdx.viewmodel.ecs.text.components.TextStyleComponent;
 
 @Bean
+@Order(100)
 public class TextRenderSubsystem extends RenderSubsystem {
     private ComponentMapper<AbsoluteCoordinatesComponent> coordinatesComponentMapper;
     private ComponentMapper<TextComponent> textComponentMapper;

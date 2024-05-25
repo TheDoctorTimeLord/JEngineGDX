@@ -15,7 +15,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.sequence.SequentialE
 import java.util.List;
 
 @Bean
-@Order(100)
+@Order(0)
 public class EventBus extends BaseSystem
 {
     private final Dispatcher dispatcher;

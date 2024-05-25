@@ -10,7 +10,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FpsRenderingComponen
 import ru.jengine.jenginegdx.viewmodel.ecs.debug.components.FrameRateTextComponent;
 
 @Bean
-@Order(512)
+@Order(1000)
 @All(FpsRenderingComponent.class)
 public class FpsUpdatingSystem extends IteratingSystem {
     public static final float FPS_WIDTH = 70;

@@ -10,7 +10,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesCompo
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.AbsoluteCoordinatesComponent;
 
 @Bean
-@Order(6)
+@Order(200)
 @All({CoordinatesComponent.class})
 public class AbsoluteCoordinatesSystem extends IteratingSystem {
     private ComponentMapper<CoordinatesComponent> coordinatesMapper;
@@ -21,7 +21,7 @@ public class AbsoluteCoordinatesSystem extends IteratingSystem {
     protected void process(int entity) {
         CoordinatesComponent coordinates = coordinatesMapper.get(entity);
 
-        if (!coordinates.isDirty()) return;
+        if (!coordinates.isDirty() && absoluteCoordinatesMapper.has(entity)) return;
         int dirty = findHighestEntityWithChangedCoordinates(entity);
         if (dirty != entity) return;
 

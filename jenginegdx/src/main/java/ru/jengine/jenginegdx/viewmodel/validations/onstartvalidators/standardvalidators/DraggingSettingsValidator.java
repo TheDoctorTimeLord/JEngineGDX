@@ -13,7 +13,7 @@ import ru.jengine.jenginegdx.utils.IntBagUtils;
 import ru.jengine.jenginegdx.utils.exceptions.JEngineGdxException;
 import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DraggingSettingsComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.HierarchyComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.input.components.UserEventHandlingComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.components.InputEventHandlingComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.worldholder.WorldHolder;
 import ru.jengine.jenginegdx.viewmodel.validations.onstartvalidators.WorldValidator;
 
@@ -32,11 +32,11 @@ public class DraggingSettingsValidator implements WorldValidator {
         EntitySubscription draggable = world.getAspectSubscriptionManager().get(all(DraggingSettingsComponent.class));
         ComponentMapper<DraggingSettingsComponent> draggingSettingsComponentMapper = world.getMapper(DraggingSettingsComponent.class);
         ComponentMapper<HierarchyComponent> hierarchyComponentMapper = world.getMapper(HierarchyComponent.class);
-        ComponentMapper<UserEventHandlingComponent> userEventHandlingComponentMapper = world.getMapper(UserEventHandlingComponent.class);
+        ComponentMapper<InputEventHandlingComponent> inputEventHandlingComponentMapper = world.getMapper(InputEventHandlingComponent.class);
 
         IntBagUtils.forEach(draggable.getEntities(), id -> {
             validateDraggingEntity(id, draggingSettingsComponentMapper, hierarchyComponentMapper);
-            validateUserEventHandling(id, userEventHandlingComponentMapper);
+            validateInputEventHandling(id, inputEventHandlingComponentMapper);
         });
     }
 
@@ -62,27 +62,27 @@ public class DraggingSettingsValidator implements WorldValidator {
                 .formatted(settingsHolderId, draggingEntityId));
     }
 
-    private static void validateUserEventHandling(int settingsHolderId,
-            ComponentMapper<UserEventHandlingComponent> userEventHandlingComponentMapper)
+    private static void validateInputEventHandling(int settingsHolderId,
+            ComponentMapper<InputEventHandlingComponent> inputEventHandlingComponentMapper)
     {
-        if (!userEventHandlingComponentMapper.has(settingsHolderId)) {
+        if (!inputEventHandlingComponentMapper.has(settingsHolderId)) {
             Gdx.app.debug(DRAGGING_SETTINGS_COMPONENT_TAG, ("Entity [%s] has no handling any events. Drag and drop " +
                     "mechanism works with handling mouse events. Set events [%s] and [%s] to %s component").formatted(
                     settingsHolderId, UserEvents.DRAG_AND_DROP, UserEvents.DROP_TO,
-                    UserEventHandlingComponent.class.getSimpleName()));
+                    InputEventHandlingComponent.class.getSimpleName()));
             return;
         }
 
-        UserEventHandlingComponent userEventHandling = userEventHandlingComponentMapper.get(settingsHolderId);
-        if (!userEventHandling.hasHandling(UserEvents.DRAG_AND_DROP)) {
+        InputEventHandlingComponent inputEventHandling = inputEventHandlingComponentMapper.get(settingsHolderId);
+        if (!inputEventHandling.hasHandling(UserEvents.DRAG_AND_DROP)) {
             Gdx.app.debug(DRAGGING_SETTINGS_COMPONENT_TAG, ("Entity [%s] has no handling user event [%s]. This event "
                     + "starts drag and drop mechanism. Set it to %s component").formatted(settingsHolderId,
-                    UserEvents.DRAG_AND_DROP, UserEventHandlingComponent.class.getSimpleName()));
+                    UserEvents.DRAG_AND_DROP, InputEventHandlingComponent.class.getSimpleName()));
         }
-        if (!userEventHandling.hasHandling(UserEvents.DROP_TO)) {
+        if (!inputEventHandling.hasHandling(UserEvents.DROP_TO)) {
             Gdx.app.debug(DRAGGING_SETTINGS_COMPONENT_TAG, ("Entity [%s] has no handling user event [%s]. This event "
                     + "drops entity to drag and drop container. Set it to %s component").formatted(settingsHolderId,
-                    UserEvents.DROP_TO, UserEventHandlingComponent.class.getSimpleName()));
+                    UserEvents.DROP_TO, InputEventHandlingComponent.class.getSimpleName()));
         }
     }
 }

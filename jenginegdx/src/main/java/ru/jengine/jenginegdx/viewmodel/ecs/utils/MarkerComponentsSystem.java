@@ -12,13 +12,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public abstract class MarkerComponentsSystem extends BaseSystem {
-    private final List<Class<? extends Component>> markedComponents;
+    private final List<Class<? extends Component>> markedComponents = new ArrayList<>();
     protected final Map<EntitySubscription, ComponentMapper<? extends Component>> subscriptions = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     protected MarkerComponentsSystem(Class<? extends Annotation> marker,
                                      List<Class<?>> marketedComponents) {
-        this.markedComponents = new ArrayList<>();
         for (Class<?> componentClass : marketedComponents) {
             if (AnnotationUtils.isAnnotationPresent(componentClass, marker) && Component.class.isAssignableFrom(componentClass)) {
                 markedComponents.add((Class<? extends Component>) componentClass);
@@ -26,10 +25,12 @@ public abstract class MarkerComponentsSystem extends BaseSystem {
         }
     }
 
-    @Override
-    protected void setWorld(World world) {
-        super.setWorld(world);
+    protected MarkerComponentsSystem(List<Class<? extends Component>> markedComponents) {
+        this.markedComponents.addAll(markedComponents);
+    }
 
+    @Override
+    protected void initialize() {
         AspectSubscriptionManager aspectSubscriptionManager = world.getAspectSubscriptionManager();
         for (Class<? extends Component> cleanableComponent : markedComponents) {
             EntitySubscription subscription = aspectSubscriptionManager.get(Aspect.all(cleanableComponent));
@@ -47,5 +48,13 @@ public abstract class MarkerComponentsSystem extends BaseSystem {
         }
     }
 
-    protected abstract void processSubscription(IntBag entities, ComponentMapper<? extends Component> mapper);
+    protected void processSubscription(IntBag entities, ComponentMapper<? extends Component> mapper) {
+        int[] ids = entities.getData();
+        for (int i = 0, size = entities.size(); i < size; i++) {
+            int id = ids[i];
+            processEntity(id, mapper);
+        }
+    }
+
+    protected abstract void processEntity(int entityId, ComponentMapper<? extends Component> mapper);
 }

@@ -23,16 +23,16 @@ import ru.jengine.jenginegdx.viewmodel.ecs.eventdispatching.systems.EventBus;
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.events.InputMappingEvent;
 import ru.jengine.jenginegdx.viewmodel.ecs.location.components.RotationComponent;
-import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchBoundComponent;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.components.InputBoundComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseTouchedComponent;
 
 @Bean
-@Order(110)
+@Order(350)
 public class DraggingSystem extends BaseSystem {
     private GlobalDraggingTrackingSystem draggingTracker;
     @All({CoordinatesComponent.class, DraggingComponent.class})
     private EntitySubscription draggingSubscription;
-    @All({CoordinatesComponent.class, MouseTouchBoundComponent.class, DroppedContainerComponent.class})
+    @All({CoordinatesComponent.class, InputBoundComponent.class, DroppedContainerComponent.class})
     private EntitySubscription containerDroppedSubscription;
     @All({DroppedComponent.class})
     private EntitySubscription droppedSubscription;
@@ -41,7 +41,7 @@ public class DraggingSystem extends BaseSystem {
     private ComponentMapper<DraggingComponent> draggingComponentMapper;
     private ComponentMapper<DraggingSettingsComponent> draggingSettingsComponentMapper;
     private ComponentMapper<MouseTouchedComponent> mouseTouchedComponentMapper;
-    private ComponentMapper<MouseTouchBoundComponent> mouseTouchBoundComponentMapper;
+    private ComponentMapper<InputBoundComponent> inputBoundComponentMapper;
     private ComponentMapper<DroppedContainerComponent> containerDroppedComponentMapper;
     private ComponentMapper<RotationComponent> rotationComponentMapper;
     private ComponentMapper<DroppedComponent> droppedComponentMapper;
@@ -124,12 +124,12 @@ public class DraggingSystem extends BaseSystem {
 
             Vector3 coordinates = coordinatesComponentMapper.get(containerId).getCoordinates();
             DroppedContainerComponent containerDropped = containerDroppedComponentMapper.get(containerId);
-            MouseTouchBoundComponent mouseTouchBound = mouseTouchBoundComponentMapper.get(containerId);
+            InputBoundComponent inputBound = inputBoundComponentMapper.get(containerId);
             float rotation = rotationComponentMapper.has(containerId)
                     ? rotationComponentMapper.get(containerId).getRotation()
                     : RotationComponent.DEFAULT_ROTATION;
 
-            if (mouseTouchBound.inBound(mouseX, mouseY, coordinates.x, coordinates.y, rotation)
+            if (inputBound.inBound(mouseX, mouseY, coordinates.x, coordinates.y, rotation)
                     && containerDropped.getTargetDraggingType().equals(draggingType))
             {
                 containerDropped.getDroppedHandler().handle(

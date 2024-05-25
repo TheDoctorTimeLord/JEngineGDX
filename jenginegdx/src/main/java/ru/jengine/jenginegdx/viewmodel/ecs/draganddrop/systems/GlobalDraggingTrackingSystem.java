@@ -1,7 +1,6 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.systems;
 
 import com.artemis.ComponentMapper;
-import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
@@ -14,7 +13,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.mouse.components.MouseEventComponent;
 import javax.annotation.Nullable;
 
 @Bean
-@Order(2)
+@Order(250)
 @All(MouseEventComponent.class)
 public class GlobalDraggingTrackingSystem extends IteratingSystem {
     private ComponentMapper<MouseEventComponent> mouseEventComponentMapper;
@@ -25,8 +24,7 @@ public class GlobalDraggingTrackingSystem extends IteratingSystem {
     private boolean receivedEvent = false;
 
     @Override
-    protected void setWorld(World world) {
-        super.setWorld(world);
+    protected void initialize() {
         this.draggingTracker = world.create();
     }
 
@@ -38,10 +36,10 @@ public class GlobalDraggingTrackingSystem extends IteratingSystem {
             DraggingTrackingComponent draggingCoordinate = draggingTrackingComponentMapper.has(draggingTracker)
                     ? draggingTrackingComponentMapper.get(draggingTracker)
                     : draggingTrackingComponentMapper.create(draggingTracker);
-            draggingCoordinate.draggingOffset(mouse.getMouseX() - lastX, mouse.getMouseY() - lastY);
+            draggingCoordinate.draggingOffset(mouse.getX() - lastX, mouse.getY() - lastY);
         }
-        lastX = mouse.getMouseX();
-        lastY = mouse.getMouseY();
+        lastX = mouse.getX();
+        lastY = mouse.getY();
     }
 
     @Override

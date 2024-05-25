@@ -1,9 +1,12 @@
 package ru.jengine.jenginegdx.viewmodel.ecs.mouse.components;
 
+import ru.jengine.jenginegdx.viewmodel.ecs.cleaning.CleanableComponentMarker;
+import ru.jengine.jenginegdx.viewmodel.ecs.input.InputWithCoordinate;
 import ru.jengine.jenginegdx.viewmodel.ecs.input.components.InputComponent;
 import ru.jengine.jenginegdx.viewmodel.ecs.mouse.MouseEventType;
 
-public class MouseEventComponent extends InputComponent {
+@CleanableComponentMarker
+public class MouseEventComponent extends InputComponent implements InputWithCoordinate {
     private float mouseX;
     private float mouseY;
     private MouseEventType eventType;
@@ -19,16 +22,28 @@ public class MouseEventComponent extends InputComponent {
         return this;
     }
 
-    public float getMouseX() {
+    @Override
+    public float getX() {
         return mouseX;
     }
 
-    public float getMouseY() {
+    @Override
+    public float getY() {
         return mouseY;
     }
 
     public MouseEventType getEventType() {
         return eventType;
+    }
+
+    @Override
+    public boolean isInteractionEvent() {
+        return eventType != null && eventType.isInteractionEvent();
+    }
+
+    @Override
+    public String toEventCode() {
+        return eventType.getUserEventCode();
     }
 
     @Override

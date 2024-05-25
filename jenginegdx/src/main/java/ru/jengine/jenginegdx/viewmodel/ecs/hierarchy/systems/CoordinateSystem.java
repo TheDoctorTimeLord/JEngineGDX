@@ -12,7 +12,7 @@ import ru.jengine.jenginegdx.viewmodel.ecs.draganddrop.components.DroppedCompone
 import ru.jengine.jenginegdx.viewmodel.ecs.hierarchy.components.CoordinatesComponent;
 
 @Bean
-@Order(5)
+@Order(150)
 @All(CoordinatesComponent.class)
 @One({DraggingComponent.class, DroppedComponent.class})
 public class CoordinateSystem extends IteratingSystem {
